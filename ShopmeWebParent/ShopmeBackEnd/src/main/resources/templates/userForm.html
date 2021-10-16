@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Title</title>
+    <link
+      rel="stylesheet"
+      type="text/css"
+      th:href="@{/webjars/bootstrap/4.6.0/css/bootstrap.min.css}"
+    />
+    <script
+      type="text/javascript"
+      th:src="@{/webjars/jquery/3.6.0/jquery.min.js}"
+    ></script>
+    <script
+      type="text/javascript"
+      th:src="@{/webjars/bootstrap/4.6.0/js/bootstrap.min.js}"
+    ></script>
+  </head>
+
+  <body>
+    <div>
+      <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <a class="navbar-brand" th:href="@{#}">
+          <img
+            th:src="@{/docs/4.6/assets/brand/bootstrap-solid.svg}"
+            alt="main-logo"
+            width="30"
+            height="30"
+          />
+        </a>
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-toggle="collapse"
+          data-target="#navbarNav"
+          aria-controls="navbarNav"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div th:if="${message != null}">
+          <div class="alert alert-success" role="alert">
+          [[${message}]]
+          </div>
+        </div>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav">
+            <li class="nav-item active">
+              <a class="nav-link" th:href="@{/users}"
+                >Users <span class="sr-only">(current)</span></a
+              >
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" th:href="@{#}">Categories</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" th:href="@{#}">Branch</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" th:href="@{#}">Products</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" th:href="@{#}">Customer</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" th:href="@{#}">Shipping</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" th:href="@{#}">Orders</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" th:href="@{#}">Sale reports</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" th:href="@{#}">Articles</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" th:href="@{#}">Menus</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" th:href="@{#}">Settings</a>
+            </li>
+          </ul>
+        </div>
+      </nav>
+      <div>
+        <div class="m-2">
+          <h1>Create user</h1>
+        </div>
+        <form
+          th:action="@{/users/save}"
+          method="post"
+          style="max-width: 800px; margin: 0 auto"
+          th:object="${user}"
+        >
+          <div class="border border-secondary rounded p-3">
+            <div class="form-group row">
+              <label for="email" class="col-sm-4 col-form-label">Email</label>
+              <input
+                type="email"
+                id="email"
+                class="form-control col-sm-8 pr-1"
+                th:field="*{email}"
+              />
+            </div>
+            <div class="form-group row">
+              <label for="firstname" class="col-sm-4 col-form-label"
+                >FirstName</label
+              >
+              <input
+                type="text"
+                id="firstname"
+                class="form-control col-sm-8 pr-1"
+                th:field="*{firstName}"
+              />
+            </div>
+            <div class="form-group row">
+              <label for="lastname" class="col-sm-4 col-form-label"
+                >LastName</label
+              >
+              <input
+                type="text"
+                id="lastname"
+                class="form-control col-sm-8 pr-1"
+                th:field="*{lastName}"
+              />
+            </div>
+            <div class="form-group row">
+              <label for="password" class="col-sm-4 col-form-label"
+                >password</label
+              >
+              <input
+                type="password"
+                id="password"
+                class="form-control col-sm-8 pr-1"
+                th:field="*{password}"
+              />
+            </div>
+            <div class="form-group row">
+              <label class="col-sm-4 col-form-label">Role</label>
+              <div class="col-sm-8" style="padding: 0;">
+                <th:block th:each="role : ${listRoles}">
+                  <input type="checkbox" th:text="${role.name}" class="mr-1" th:value="${role.id}" th:field="*{roles}">
+                  <small>- [[${role.description}]]</small><br>
+                </th:block>
+              </div>
+            </div>
+                        <div class="form-group row">
+              <label for="password" class="col-sm-4 col-form-label">Enabled</label>
+              <div class="col-sm-8" style="padding: 0;">
+                  <input type="checkbox" class="mr-1" th:field="*{enabled}">
+              </div>
+            </div>
+            <div class="text-center">
+              <button type="submit" class="btn btn-primary m-3">Save</button>
+              <button type="button" class="btn btn-secondary" id="btnCancle">Cancel</button>
+            </div>
+          </div>
+        </form>
+      </div>
+      <div>
+        <div class="text-center">Shopme copyright @copy;</div>
+      </div>
+    </div>
+    <script type="text/javascript">
+      $(document).ready(function() {
+         $("#btnCancle").on("click", function() {
+           window.location = "[[@{/users}]]";
+         })
+      })
+    </script>
+  </body>
+</html>
