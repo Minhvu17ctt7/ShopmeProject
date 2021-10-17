@@ -2,12 +2,23 @@
 <html xmlns:th="http://www.thymeleaf.org">
   <head>
     <meta charset="UTF-8" />
-    <title>Title</title>
+    <title>Users - Shopme Admin</title>
     <link
       rel="stylesheet"
       type="text/css"
       th:href="@{/webjars/bootstrap/4.6.0/css/bootstrap.min.css}"
     />
+    <link
+            rel="stylesheet"
+            type="text/css"
+            th:href="@{/css/all.css}"
+    />
+    <link
+            rel="stylesheet"
+            type="text/css"
+            th:href="@{/css/style.css}"
+    />
+
     <script
       type="text/javascript"
       th:src="@{/webjars/jquery/3.6.0/jquery.min.js}"
@@ -103,13 +114,20 @@
           <tbody>
             <tr th:each="user : ${users}">
               <td th:text="${user.id}"></td>
-              <td></td>
+              <td><i class="fas fa-user fa-3x"></i></td>
               <td th:text="${user.email}"></td>
               <td th:text="${user.firstName}"></td>
               <td th:text="${user.lastName}"></td>
               <td th:text="${user.roles}"></td>
-              <td th:text="${user.isEnabled}"></td>
-              <td>Edit Delete</td>
+              <td>
+                <a th:if="${user.enabled == true}" class="fas fa-check-circle green-icon"></a>
+                <a th:if="${user.enabled == false}" class="fas fa-check-circle dark-icon"></a>
+
+              </td>
+              <td>
+                <a class="far fa-edit green-icon"></a>
+                <a class="fas fa-trash dark-icon"></a>
+              </td>
             </tr>
           </tbody>
         </table>

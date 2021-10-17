@@ -65,4 +65,9 @@ public class UserRepositoryTest {
         user.setEmail("Xuantun@gmail.com");
         userRepository.save(user);
     }
+
+    @Test void testFindUserByEmail() {
+        User user = userRepository.findByEmail("Minhvu12918@gmail.com");
+        assertThat(user).isNotNull();
+    }
 }

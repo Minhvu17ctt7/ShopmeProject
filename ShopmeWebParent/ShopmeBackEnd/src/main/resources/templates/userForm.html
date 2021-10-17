@@ -94,6 +94,7 @@
           method="post"
           style="max-width: 800px; margin: 0 auto"
           th:object="${user}"
+          onsubmit="return submitForm(this)"
         >
           <div class="border border-secondary rounded p-3">
             <div class="form-group row">
@@ -160,6 +161,24 @@
           </div>
         </form>
       </div>
+      <!-- Modal -->
+<div class="modal fade" id="modal-dialog" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="modal-title"></h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <p id="model-message" class="modal-body">
+      </p>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
       <div>
         <div class="text-center">Shopme copyright @copy;</div>
       </div>
@@ -170,6 +189,29 @@
            window.location = "[[@{/users}]]";
          })
       })
+      function submitForm(form) {
+        const userEmail = $("#email").val();
+        const csrfValue = $("input[name='_csrf']").val();
+        const url = "[[@{/users/check_email}]]";
+        const param = {email: userEmail, _csrf: csrfValue};
+        $.post(url, param, (res) => {
+          if(res == "OK") {
+            form.submit();
+          } else if(res == "Duplicated"){
+            showModalDialog("Warning",userEmail + " is already");
+          }else {
+            showModalDialog("rror", "Unknown response from server")
+          }
+        }).fail(() => {
+          showModalDialog("Error", "Do not connect to server");
+        })
+        return false;
+      }
+      function showModalDialog(title, message) {
+        $("#modal-title").text(title);
+        $("#model-message").text(message);
+        $("#modal-dialog").modal();
+      }
     </script>
   </body>
 </html>
