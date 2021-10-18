@@ -87,7 +87,7 @@
       </nav>
       <div>
         <div class="m-2">
-          <h1>Create user</h1>
+          <h2>Manage User/[[${titlePage}]]</h2>
         </div>
         <form
           th:action="@{/users/save}"
@@ -96,6 +96,7 @@
           th:object="${user}"
           onsubmit="return submitForm(this)"
         >
+          <input type="hidden" th:field="*{id}" >
           <div class="border border-secondary rounded p-3">
             <div class="form-group row">
               <label for="email" class="col-sm-4 col-form-label">Email</label>
@@ -104,6 +105,7 @@
                 id="email"
                 class="form-control col-sm-8 pr-1"
                 th:field="*{email}"
+                required
               />
             </div>
             <div class="form-group row">
@@ -115,6 +117,7 @@
                 id="firstname"
                 class="form-control col-sm-8 pr-1"
                 th:field="*{firstName}"
+                required
               />
             </div>
             <div class="form-group row">
@@ -126,17 +129,29 @@
                 id="lastname"
                 class="form-control col-sm-8 pr-1"
                 th:field="*{lastName}"
+                required
               />
             </div>
             <div class="form-group row">
               <label for="password" class="col-sm-4 col-form-label"
                 >password</label
               >
-              <input
+              <input th:if="${user.id == null}"
                 type="password"
                 id="password"
                 class="form-control col-sm-8 pr-1"
                 th:field="*{password}"
+                required
+                minlength="8"
+                maxlength="16"
+              />
+              <input th:if="${user.id != null}"
+                      type="password"
+                      id="password"
+                      class="form-control col-sm-8 pr-1"
+                      th:field="*{password}"
+                      minlength="8"
+                      maxlength="16"
               />
             </div>
             <div class="form-group row">
@@ -148,10 +163,17 @@
                 </th:block>
               </div>
             </div>
-                        <div class="form-group row">
+            <div class="form-group row">
               <label for="password" class="col-sm-4 col-form-label">Enabled</label>
               <div class="col-sm-8" style="padding: 0;">
                   <input type="checkbox" class="mr-1" th:field="*{enabled}">
+              </div>
+            </div>
+            <div class="form-group row">
+              <label for="file-image" class="col-sm-4 col-form-label">Phots</label>
+              <div class="col-sm-8" style="padding: 0;">
+                <input type="image" id="file-image" accept="image/jpeg, image/png">
+                <img th:src="@{/static/images/userDefault.jpg}" id="thumbnail" alt="avatar" >
               </div>
             </div>
             <div class="text-center">
@@ -188,19 +210,33 @@
          $("#btnCancle").on("click", function() {
            window.location = "[[@{/users}]]";
          })
+        $("#file-image").change(() => {
+          updateImage(this);
+        })
       })
+
+      function updateImage(fileInput) {
+        const file = fileInput.file[0];
+        const reader = new FileReader();
+        reader.onload = () => {
+          $("#thumbnail").attr("src",e.target.result);
+        }
+        reader.readAsDataURL(file);
+      }
+
       function submitForm(form) {
         const userEmail = $("#email").val();
         const csrfValue = $("input[name='_csrf']").val();
         const url = "[[@{/users/check_email}]]";
-        const param = {email: userEmail, _csrf: csrfValue};
+        const idUser = $("input[type='hiddent']").val();
+        const param = {id: idUser,email: userEmail, _csrf: csrfValue};
         $.post(url, param, (res) => {
           if(res == "OK") {
             form.submit();
           } else if(res == "Duplicated"){
             showModalDialog("Warning",userEmail + " is already");
           }else {
-            showModalDialog("rror", "Unknown response from server")
+            showModalDialog("Error", "Unknown response from server")
           }
         }).fail(() => {
           showModalDialog("Error", "Do not connect to server");

@@ -70,4 +70,15 @@ public class UserRepositoryTest {
         User user = userRepository.findByEmail("Minhvu12918@gmail.com");
         assertThat(user).isNotNull();
     }
+
+    @Test
+    void testCoundUserById() {
+        Long count = userRepository.countUsersById(Long.parseLong("3"));
+        assertThat(count).isGreaterThan(0);
+    }
+
+    @Test
+    void testUpdateStatus() {
+        userRepository.updateEnabledStatus(Long.parseLong("2"), true);
+    }
 }

@@ -13,9 +13,8 @@ public class UserRestController {
     private final UserService userService;
 
     @PostMapping("/users/check_email")
-    public String checkEmailUnique(@Param("email") String email) {
-        boolean isUnique = userService.isEmailUnique(email);
+    public String checkEmailUnique(@Param("id") Long id,@Param("email") String email) {
+        boolean isUnique = userService.isEmailUnique(id,email);
         return isUnique? "OK":"Duplicated";
     }
-
 }

@@ -8,16 +8,8 @@
       type="text/css"
       th:href="@{/webjars/bootstrap/4.6.0/css/bootstrap.min.css}"
     />
-    <link
-            rel="stylesheet"
-            type="text/css"
-            th:href="@{/css/all.css}"
-    />
-    <link
-            rel="stylesheet"
-            type="text/css"
-            th:href="@{/css/style.css}"
-    />
+    <link rel="stylesheet" type="text/css" th:href="@{/css/all.css}" />
+    <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}" />
 
     <script
       type="text/javascript"
@@ -92,10 +84,13 @@
         </div>
       </nav>
       <div class="mb-2">
-        <h1>Manage Users</h1>
+        <h2>Manage user</h2>
         <a th:href="@{/users/new}">
           <button type="button" class="btn btn-primary">Create user</button></a
         >
+      </div>
+      <div th:if="${message != null}" class="alert alert-success" role="alert">
+        [[${message}]]
       </div>
       <div>
         <table class="table table-bordered table-striped">
@@ -114,25 +109,79 @@
           <tbody>
             <tr th:each="user : ${users}">
               <td th:text="${user.id}"></td>
-              <td><i class="fas fa-user fa-3x"></i></td>
+              <td class="text-center"><i class="fas fa-user fa-3x"></i></td>
               <td th:text="${user.email}"></td>
               <td th:text="${user.firstName}"></td>
               <td th:text="${user.lastName}"></td>
               <td th:text="${user.roles}"></td>
-              <td>
-                <a th:if="${user.enabled == true}" class="fas fa-check-circle green-icon"></a>
-                <a th:if="${user.enabled == false}" class="fas fa-check-circle dark-icon"></a>
-
-              </td>
-              <td>
-                <a class="far fa-edit green-icon"></a>
-                <a class="fas fa-trash dark-icon"></a>
+              <td class="text-center">                <a
+                      th:if="${user.enabled == true}"
+                      class="fas fa-check-circle fa-2x green-icon"
+                      th:href="@{'/users/' + ${user.id} + '/enabled/false'}"
+              ></a>
+                <a
+                        th:if="${user.enabled == false}"
+                        class="fas fa-check-circle fa-2x dark-icon"
+                        th:href="@{'/users/' + ${user.id} + '/enabled/true'}"
+                ></a></td>
+              <td class="text-center">
+                <a
+                  class="far fa-edit fa-1x green-icon"
+                  th:href="@{'/users/edit/' + ${user.id}}"
+                ></a
+                >&nbsp;
+                <a
+                  class="fas fa-trash fa-1x dark-icon btnDelete"
+                  th:userId="${user.id}"
+                  th:href="@{'/users/delete/' + ${user.id}}"
+                  title="Delete this user"
+                ></a>
               </td>
             </tr>
           </tbody>
         </table>
       </div>
-      <div class="text-center">Shopme copyright @copy;</div>
+      <div
+        class="modal fade"
+        id="modal-dialog"
+        tabindex="-1"
+        aria-labelledby="exampleModalLabel"
+        aria-hidden="true"
+      >
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalLabel">Delete</h5>
+              <button
+                type="button"
+                class="close"
+                data-dismiss="modal"
+                aria-label="Close"
+              >
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body"></div>
+            <div class="modal-footer">
+              <a type="button" class="btn btn-success" href="" id="btnYes">Yes</a>
+              <button type="button" class="btn btn-danger" data-dismiss="modal">
+                No
+              </button>
+            </div>
+          </div>
+        </div>
+        <div class="text-center">Shopme copyright @copy;</div>
+      </div>
     </div>
+    <script type="text/javascript">
+      $(".btnDelete").click((e) => {
+        e.preventDefault();
+        const userId = e.target.getAttribute("userId");
+        const url = e.target.getAttribute("href");
+        $("#btnYes").attr("href", url);
+        $(".modal-body").text("Delete user " + userId);
+        $("#modal-dialog").modal();
+      });
+    </script>
   </body>
 </html>
