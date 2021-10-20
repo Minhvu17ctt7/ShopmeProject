@@ -14,7 +14,7 @@ import java.util.Set;
 @RequiredArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table
+@Table(name="Roles")
 public class Role {
 
     @Id

@@ -1,15 +1,22 @@
 package com.example.shopmebackend.user;
 
+import com.example.shopmebackend.Utils.FileUploadUtil;
 import com.example.shopmecommon.entity.Role;
 import com.example.shopmecommon.entity.User;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.io.IOException;
+import java.nio.file.Files;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -24,13 +31,37 @@ public class UserController {
     }
 
     @GetMapping("/users")
-    public String retrieveAllUsers(Model model) {
+    public String retrieveUsersFirstPage(Model model) {
+        return retrieveUsersPagination(model,1, "firstName", "asc", null);
+    }
 
-        List<User> users = userService.getAllUsers();
+    @GetMapping("/users/page/{pageNumber}")
+    public String retrieveUsersPagination(Model model, @PathVariable("pageNumber") int pageNumber,@RequestParam("sortField") String sortField,
+            @RequestParam("sortName") String sortName, @RequestParam("keyword") String keywork) {
+        Page<User> page = userService.getListUserPagination(pageNumber, sortField, sortName, keywork);
+        List<User> users = page.getContent();
+
+        Long startCount = Long.valueOf((pageNumber - 1) * UserService.USER_SIZE_PAGE + 1);
+        Long endCount = startCount + UserService.USER_SIZE_PAGE - 1;
+        if (endCount > page.getTotalElements()) {
+            endCount = page.getTotalElements();
+        }
+        String reverseSort = sortName.equals("asc") ? "dsc" : "asc";
+
+        model.addAttribute("currentPage", pageNumber);
+        model.addAttribute("startCount", startCount);
+        model.addAttribute("endCount", endCount);
+        model.addAttribute("totalItems", page.getTotalElements());
+        model.addAttribute("totalPages", page.getTotalPages());
         model.addAttribute("users",users);
+        model.addAttribute("sortField", sortField);
+        model.addAttribute("sortName", sortName);
+        model.addAttribute("reverseSort", reverseSort);
+        model.addAttribute("keyword", keywork);
 
         return "users";
     }
+
 
     @GetMapping("/users/new")
     public String newUser(Model model) {
@@ -45,10 +76,25 @@ public class UserController {
 
 
     @PostMapping("/users/save")
-    public String saveUser(User user, RedirectAttributes redirectAttributes) {
-        userService.saveUser(user);
-        redirectAttributes.addFlashAttribute("message", "The user has been saved sussecfull!");
-        return "redirect:/users";
+    public String saveUser(User user, RedirectAttributes redirectAttributes, @RequestParam("image") MultipartFile multipartFile) throws IOException {
+        if(!multipartFile.isEmpty()) {
+            String fileName = StringUtils.cleanPath(multipartFile.getOriginalFilename());
+            user.setPhotos(fileName);
+            User savedUser = userService.saveUser(user);
+            String uploadDir = "user-photos/" + savedUser.getId();
+            FileUploadUtil.cleanDir(uploadDir);
+            FileUploadUtil.saveFile(uploadDir, fileName, multipartFile);
+        } else {
+            if(user.getPhotos().isEmpty()) user.setPhotos(null);
+            userService.saveUser(user);
+        }
+        redirectAttributes.addFlashAttribute("message", "The user has been saved successfull!");
+        return getRedirectUrlFromUser(user);
+    }
+
+    private String getRedirectUrlFromUser(User user) {
+        String nameInEmail = user.getEmail().split("@")[0];
+        return "redirect:/users/page/1?sortField=id&sortName=asc&keyword=" + nameInEmail;
     }
 
     @GetMapping("/users/edit/{id}")

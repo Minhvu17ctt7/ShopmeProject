@@ -16,6 +16,8 @@
       type="text/javascript"
       th:src="@{/webjars/bootstrap/4.6.0/js/bootstrap.min.js}"
     ></script>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/all.css}" />
+    <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}" />
   </head>
 
   <body>
@@ -95,8 +97,9 @@
           style="max-width: 800px; margin: 0 auto"
           th:object="${user}"
           onsubmit="return submitForm(this)"
+          enctype="multipart/form-data"
         >
-          <input type="hidden" th:field="*{id}" >
+          <input type="hidden" id="id-hidden" th:field="*{id}" >
           <div class="border border-secondary rounded p-3">
             <div class="form-group row">
               <label for="email" class="col-sm-4 col-form-label">Email</label>
@@ -172,8 +175,9 @@
             <div class="form-group row">
               <label for="file-image" class="col-sm-4 col-form-label">Phots</label>
               <div class="col-sm-8" style="padding: 0;">
-                <input type="image" id="file-image" accept="image/jpeg, image/png">
-                <img th:src="@{/static/images/userDefault.jpg}" id="thumbnail" alt="avatar" >
+                <input type="hidden" th:field="*{photos}">
+                <input type="file" name="image" class="mb-2" id="file-image" accept="image/jpeg, image/png">
+                <img th:src="@{${user.photosURL}}" id="thumbnail" alt="avatar" >
               </div>
             </div>
             <div class="text-center">
@@ -210,16 +214,23 @@
          $("#btnCancle").on("click", function() {
            window.location = "[[@{/users}]]";
          })
-        $("#file-image").change(() => {
-          updateImage(this);
+        $("#file-image").change((e) => {
+          const fileSize = e.target.files[0].size;
+          if(fileSize > 1048576) {
+            e.target.setCustomValidity("You must choose an image less than 1MB!");
+            e.target.reportValidity();
+          }else {
+            e.target.setCustomValidity("");
+            updateImage(e.target);}
         })
       })
 
       function updateImage(fileInput) {
-        const file = fileInput.file[0];
-        const reader = new FileReader();
-        reader.onload = () => {
-          $("#thumbnail").attr("src",e.target.result);
+        console.log(fileInput);
+        var file = fileInput.files[0];
+        var reader = new FileReader();
+        reader.onload = function (e) {
+          $("#thumbnail").attr("src", e.target.result);
         }
         reader.readAsDataURL(file);
       }
@@ -228,14 +239,14 @@
         const userEmail = $("#email").val();
         const csrfValue = $("input[name='_csrf']").val();
         const url = "[[@{/users/check_email}]]";
-        const idUser = $("input[type='hiddent']").val();
+        const idUser = $("#id-hidden").val();
         const param = {id: idUser,email: userEmail, _csrf: csrfValue};
         $.post(url, param, (res) => {
           if(res == "OK") {
             form.submit();
           } else if(res == "Duplicated"){
             showModalDialog("Warning",userEmail + " is already");
-          }else {
+          } else {
             showModalDialog("Error", "Unknown response from server")
           }
         }).fail(() => {

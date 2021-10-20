@@ -3,6 +3,10 @@ package com.example.shopmebackend.user;
 import com.example.shopmecommon.entity.Role;
 import com.example.shopmecommon.entity.User;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -18,6 +22,7 @@ public class UserService {
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
     private final PasswordEncoder passwordEncoder;
+    public static final int USER_SIZE_PAGE = 4;
 
     public List<User> getAllUsers() {
         return userRepository.findAll();
@@ -72,5 +77,15 @@ public class UserService {
 
     public void updateEnabledStatus(Long id, boolean enabled) {
         userRepository.updateEnabledStatus(id, enabled);
+    }
+
+    public Page<User> getListUserPagination(int pageNumber,String sortField, String sortName, String keyword) {
+        Sort sort = Sort.by(sortField);
+        sort = sortName.equals("asc") ? sort.ascending() : sort.descending();
+        Pageable pageable = PageRequest.of(pageNumber - 1, USER_SIZE_PAGE, sort);
+        if(keyword != null) {
+            return userRepository.findAll(keyword, pageable);
+        }
+        return userRepository.findAll(pageable);
     }
 }

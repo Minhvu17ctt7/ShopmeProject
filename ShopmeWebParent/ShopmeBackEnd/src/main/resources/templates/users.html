@@ -83,47 +83,90 @@
           </ul>
         </div>
       </nav>
-      <div class="mb-2">
+      <div class="m-2">
         <h2>Manage user</h2>
-        <a th:href="@{/users/new}">
-          <button type="button" class="btn btn-primary">Create user</button></a
-        >
+        <a th:href="@{/users/new}">Create user</a>
+
+        <div>
+          <form
+            th:action="@{/users/page/1}"
+            method="get"
+            class="form-inline m-3"
+          >
+            <input type="hidden" name="sortField" th:value="${sortField}" />
+            <input type="hidden" name="sortName" th:value="${sortName}" />
+            Filter:
+            <input
+              type="search"
+              name="keyword"
+              th:value="${keywork}"
+              class="form-control mr-2 ml-2"
+              required
+            />
+            <input
+              type="submit"
+              th:value="Search"
+              class="btn btn-primary mr-2"
+            />
+            <input
+              type="button"
+              th:value="Clear"
+              class="btn btn-secondary"
+              onclick="onClearFormSearch()"
+            />
+          </form>
+        </div>
       </div>
-      <div th:if="${message != null}" class="alert alert-success" role="alert">
+      <div
+        th:if="${message != null}"
+        class="alert alert-success m-2"
+        role="alert"
+      >
         [[${message}]]
       </div>
       <div>
         <table class="table table-bordered table-striped">
           <thead class="thead-dark">
             <tr>
-              <th scope="col">user ud</th>
+              <th th:replace="fragments :: collume_link('User id', 'id')"></th>
+
               <th scope="col">Photos</th>
-              <th scope="col">Email</th>
-              <th scope="col">First Name</th>
-              <th scope="col">Last Name</th>
+              <th th:replace="fragments :: collume_link('Email', 'email')"></th>
+              <th th:replace="fragments :: collume_link('First Name', 'firstName')"></th>
+              <th th:replace="fragments :: collume_link('Last Name', 'lastName')"></th>
               <th scope="col">Roles</th>
-              <th scope="col">Enabled</th>
+              <th th:replace="fragments :: collume_link('Enabled', 'enabled')"></th>
               <th scope="col"></th>
             </tr>
           </thead>
           <tbody>
             <tr th:each="user : ${users}">
               <td th:text="${user.id}"></td>
-              <td class="text-center"><i class="fas fa-user fa-3x"></i></td>
+              <td class="text-center">
+                <i th:if="${user.photos == null}" class="fas fa-user fa-3x"></i>
+                <img
+                  th:if="${user.photos != null}"
+                  th:src="@{${user.photosURL}}"
+                  style="width: 100px"
+                  alt="avatar"
+                />
+              </td>
               <td th:text="${user.email}"></td>
               <td th:text="${user.firstName}"></td>
               <td th:text="${user.lastName}"></td>
               <td th:text="${user.roles}"></td>
-              <td class="text-center">                <a
-                      th:if="${user.enabled == true}"
-                      class="fas fa-check-circle fa-2x green-icon"
-                      th:href="@{'/users/' + ${user.id} + '/enabled/false'}"
-              ></a>
+              <td class="text-center">
                 <a
-                        th:if="${user.enabled == false}"
-                        class="fas fa-check-circle fa-2x dark-icon"
-                        th:href="@{'/users/' + ${user.id} + '/enabled/true'}"
-                ></a></td>
+                  th:if="${user.enabled == true}"
+                  class="fas fa-check-circle fa-2x green-icon"
+                  th:href="@{'/users/' + ${user.id} + '/enabled/false'}"
+                ></a>
+                <a
+                  th:if="${user.enabled == false}"
+                  class="fas fa-check-circle fa-2x dark-icon"
+                  th:href="@{'/users/' + ${user.id} + '/enabled/true'}"
+                ></a>
+              </td>
               <td class="text-center">
                 <a
                   class="far fa-edit fa-1x green-icon"
@@ -140,6 +183,47 @@
             </tr>
           </tbody>
         </table>
+      </div>
+      <div class="text-center mb-2" th:if="${totalItems > 0}">
+        <span>
+          Show users [[${startCount}]] to [[${endCount}]] of
+          [[${totalItems}]]</span
+        >
+      </div>
+      <div class="text-center" th:unless="${totalItems > 0}">
+        <span> No users found </span>
+      </div>
+      <div class="text-center" th:if="${totalPages > 1}">
+        <nav>
+          <ul class="pagination justify-content-center">
+            <li
+              th:class="${currentPage > 1 ? 'page-item' : 'page-item disabled'}"
+            >
+              <a th:replace="fragments :: link_pagination('First', 1)"></a>
+            </li>
+            <li
+              th:class="${currentPage > 1 ? 'page-item' : 'page-item disabled'}"
+            >
+              <a th:replace="fragments :: link_pagination('Previous', ${currentPage - 1})"></a>
+            </li>
+            <li
+              th:class="${currentPage != i ? 'page-item' : 'page-item active'}"
+              th:each=" i : ${#numbers.sequence(1, totalPages)}"
+            >
+              <a th:replace="fragments :: link_pagination(${i}, ${i})"></a>
+            </li>
+            <li
+              th:class="${currentPage < totalPages ? 'page-item' : 'page-item disabled'}"
+            >
+              <a th:replace="fragments :: link_pagination('Next', ${currentPage + 1})"></a>
+            </li>
+            <li
+              th:class="${currentPage < totalPages ? 'page-item' : 'page-item disabled'}"
+            >
+              <a th:replace="fragments :: link_pagination('Last', ${totalPages})"></a>
+            </li>
+          </ul>
+        </nav>
       </div>
       <div
         class="modal fade"
@@ -163,7 +247,9 @@
             </div>
             <div class="modal-body"></div>
             <div class="modal-footer">
-              <a type="button" class="btn btn-success" href="" id="btnYes">Yes</a>
+              <a type="button" class="btn btn-success" href="" id="btnYes"
+                >Yes</a
+              >
               <button type="button" class="btn btn-danger" data-dismiss="modal">
                 No
               </button>
@@ -182,6 +268,9 @@
         $(".modal-body").text("Delete user " + userId);
         $("#modal-dialog").modal();
       });
+      function onClearFormSearch() {
+        window.location = "[[@{/users}]]";
+      }
     </script>
   </body>
 </html>

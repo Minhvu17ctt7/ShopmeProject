@@ -72,4 +72,11 @@ public class User {
     public int hashCode() {
         return 0;
     }
+
+    //No map to database
+    @Transient
+    public String getPhotosURL() {
+        if(id == null || photos == null) return "/images/user-default.jpg";
+        return "/user-photos/" + this.id + "/" + this.photos;
+    }
 }
