@@ -86,7 +86,10 @@
       <div class="m-2">
         <h2>Manage user</h2>
         <a th:href="@{/users/new}">Create user</a>
-
+        &nbsp;|&nbsp;
+        <a th:href="@{/users/export/csv}">Export to CSV</a>
+        &nbsp;|&nbsp;
+        <a th:href="@{/users/export/excel}">Export to CSV</a>
         <div>
           <form
             th:action="@{/users/page/1}"

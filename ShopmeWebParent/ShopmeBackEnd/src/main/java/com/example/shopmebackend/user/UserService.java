@@ -25,7 +25,7 @@ public class UserService {
     public static final int USER_SIZE_PAGE = 4;
 
     public List<User> getAllUsers() {
-        return userRepository.findAll();
+        return userRepository.findAll(Sort.by("firstName").ascending());
     }
     public List<Role> getAllRoles() {return roleRepository.findAll();}
     public User saveUser(User user) {

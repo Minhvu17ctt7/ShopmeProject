@@ -1,6 +1,8 @@
 package com.example.shopmebackend.user;
 
 import com.example.shopmebackend.Utils.FileUploadUtil;
+import com.example.shopmebackend.Utils.UserCsvExporter;
+import com.example.shopmebackend.Utils.UserExcelExporter;
 import com.example.shopmecommon.entity.Role;
 import com.example.shopmecommon.entity.User;
 import lombok.RequiredArgsConstructor;
@@ -15,8 +17,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.nio.file.Files;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -136,5 +138,19 @@ public class UserController {
         String message = "The user ID " + id + " has been " + updateStatus;
         redirectAttributes.addFlashAttribute("message",message);
         return "redirect:/users";
+    }
+
+    @GetMapping("users/export/csv")
+    public void exportToCSV(HttpServletResponse httpServletResponse) throws IOException {
+        List<User> listUsers = userService.getAllUsers();
+        UserCsvExporter exporter = new UserCsvExporter();
+        exporter.export(listUsers, httpServletResponse);
+    }
+
+    @GetMapping("users/export/excel")
+    public void exportToExcel(HttpServletResponse httpServletResponse) throws IOException {
+        List<User> listUsers = userService.getAllUsers();
+        UserExcelExporter exporter = new UserExcelExporter();
+        exporter.export(listUsers, httpServletResponse);
     }
 }
