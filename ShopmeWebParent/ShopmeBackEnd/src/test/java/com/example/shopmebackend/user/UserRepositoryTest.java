@@ -13,6 +13,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.test.annotation.Rollback;
 
 import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
@@ -112,5 +113,12 @@ public class UserRepositoryTest {
 
         users.forEach(System.out::println);
         assertThat(users.size()).isGreaterThan(0);
+    }
+
+    @Test
+    void testGetStringListRoles() {
+        Optional<User> optional = userRepository.findById(Long.parseLong("2"));
+        System.out.print("list roles: ");
+        System.out.println(optional.get().getListRoles());
     }
 }

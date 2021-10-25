@@ -1,102 +1,26 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
-  <head>
-    <meta charset="UTF-8" />
-    <title>Users - Shopme Admin</title>
-    <link
-      rel="stylesheet"
-      type="text/css"
-      th:href="@{/webjars/bootstrap/4.6.0/css/bootstrap.min.css}"
-    />
-    <link rel="stylesheet" type="text/css" th:href="@{/css/all.css}" />
-    <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}" />
-
-    <script
-      type="text/javascript"
-      th:src="@{/webjars/jquery/3.6.0/jquery.min.js}"
-    ></script>
-    <script
-      type="text/javascript"
-      th:src="@{/webjars/bootstrap/4.6.0/js/bootstrap.min.js}"
-    ></script>
-  </head>
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+<head th:replace="fragments :: page_header('User - Shopme Admin')" />
 
   <body>
     <div>
-      <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <a class="navbar-brand" th:href="@{#}">
-          <img
-            th:src="@{/docs/4.6/assets/brand/bootstrap-solid.svg}"
-            alt="main-logo"
-            width="30"
-            height="30"
-          />
-        </a>
-        <button
-          class="navbar-toggler"
-          type="button"
-          data-toggle="collapse"
-          data-target="#navbarNav"
-          aria-controls="navbarNav"
-          aria-expanded="false"
-          aria-label="Toggle navigation"
-        >
-          <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNav">
-          <ul class="navbar-nav">
-            <li class="nav-item active">
-              <a class="nav-link" th:href="@{/users}"
-                >Users <span class="sr-only">(current)</span></a
-              >
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" th:href="@{#}">Categories</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" th:href="@{#}">Branch</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" th:href="@{#}">Products</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" th:href="@{#}">Customer</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" th:href="@{#}">Shipping</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" th:href="@{#}">Orders</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" th:href="@{#}">Sale reports</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" th:href="@{#}">Articles</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" th:href="@{#}">Menus</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" th:href="@{#}">Settings</a>
-            </li>
-          </ul>
-        </div>
-      </nav>
+      <div th:replace="navigation :: menu"></div>
       <div class="m-2">
         <h2>Manage user</h2>
-        <a th:href="@{/users/new}">Create user</a>
+        <a th:href="@{/users/new}" class="fas fa-user-plus dark-icon fa-2x"></a>
         &nbsp;|&nbsp;
-        <a th:href="@{/users/export/csv}">Export to CSV</a>
+        <a th:href="@{/users/export/csv}" class="fas fa-file-csv dark-icon fa-2x mr-1"></a>
         &nbsp;|&nbsp;
-        <a th:href="@{/users/export/excel}">Export to CSV</a>
+        <a th:href="@{/users/export/excel}" class="fas fa-file-excel dark-icon fa-2x mr-1"></a>
+        &nbsp;|&nbsp;
+        <a th:href="@{/users/export/pdf}" class="fas fa-file-pdf dark-icon fa-2x mr-1"></a>
         <div>
           <form
             th:action="@{/users/page/1}"
             method="get"
             class="form-inline m-3"
           >
-            <input type="hidden" name="sortField" th:value="${sortField}" />
+            <input type="hidden" name="sortField" th:value="${sortField}"/>
             <input type="hidden" name="sortName" th:value="${sortName}" />
             Filter:
             <input
@@ -105,18 +29,18 @@
               th:value="${keywork}"
               class="form-control mr-2 ml-2"
               required
-            />
-            <input
+            >
+            <button
               type="submit"
               th:value="Search"
               class="btn btn-primary mr-2"
-            />
-            <input
+            > <i class="fas fa-search"></i></button>
+            <button
               type="button"
               th:value="Clear"
               class="btn btn-secondary"
               onclick="onClearFormSearch()"
-            />
+            /><i class="fas fa-eraser"></i></button>
           </form>
         </div>
       </div>
@@ -127,7 +51,7 @@
       >
         [[${message}]]
       </div>
-      <div>
+      <div class="full-details">
         <table class="table table-bordered table-striped">
           <thead class="thead-dark">
             <tr>
@@ -186,6 +110,23 @@
             </tr>
           </tbody>
         </table>
+      </div>
+      <div class="haft-details">Đây là full detail</div>
+      <div class="less-details">
+        <div th:each="user : ${users}" class="row m-1">
+            <div class="col">
+              <i th:if="${user.photos == null}" class="fas fa-user fa-3x"></i>
+              <img
+                      th:if="${user.photos != null}"
+                      th:src="@{${user.photosURL}}"
+                      style="width: 100px"
+                      alt="avatar"
+              />
+            </div>
+          <div>&nbsp;</div>
+        </div>
+
+
       </div>
       <div class="text-center mb-2" th:if="${totalItems > 0}">
         <span>
@@ -259,8 +200,8 @@
             </div>
           </div>
         </div>
-        <div class="text-center">Shopme copyright @copy;</div>
       </div>
+      <div th:replace="fragments :: footer"></div>
     </div>
     <script type="text/javascript">
       $(".btnDelete").click((e) => {

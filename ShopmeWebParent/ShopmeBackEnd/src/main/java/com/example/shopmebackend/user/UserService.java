@@ -28,6 +28,9 @@ public class UserService {
         return userRepository.findAll(Sort.by("firstName").ascending());
     }
     public List<Role> getAllRoles() {return roleRepository.findAll();}
+    public User getUserByEmail(String email) {
+        return userRepository.findByEmail(email);
+    }
     public User saveUser(User user) {
         if(user.getId() != null) {
             if(user.getPassword().isEmpty()) {

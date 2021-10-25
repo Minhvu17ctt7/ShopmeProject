@@ -38,9 +38,9 @@ public class User {
     @Column(length = 64)
     private String photos;
 
-    private boolean enabled;
+    private boolean enabled = true;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     @JsonIgnore
     @JoinTable(
             name = "users_roles",
@@ -78,5 +78,13 @@ public class User {
     public String getPhotosURL() {
         if(id == null || photos == null) return "/images/user-default.jpg";
         return "/user-photos/" + this.id + "/" + this.photos;
+    }
+
+    public String getListRoles() {
+        StringBuilder s = new StringBuilder("");
+        for(Role role: roles) {
+            s.append(role.getName()).append(" ");
+        }
+        return s.toString();
     }
 }

@@ -1,8 +1,9 @@
 package com.example.shopmebackend.user;
 
-import com.example.shopmebackend.Utils.FileUploadUtil;
-import com.example.shopmebackend.Utils.UserCsvExporter;
-import com.example.shopmebackend.Utils.UserExcelExporter;
+import com.example.shopmebackend.utils.FileUploadUtil;
+import com.example.shopmebackend.utils.UserCsvExporter;
+import com.example.shopmebackend.utils.UserExcelExporter;
+import com.example.shopmebackend.utils.UserPdfExporter;
 import com.example.shopmecommon.entity.Role;
 import com.example.shopmecommon.entity.User;
 import lombok.RequiredArgsConstructor;
@@ -153,4 +154,13 @@ public class UserController {
         UserExcelExporter exporter = new UserExcelExporter();
         exporter.export(listUsers, httpServletResponse);
     }
+
+    @GetMapping("users/export/pdf")
+    public void exportToPdf(HttpServletResponse httpServletResponse) throws IOException {
+        List<User> listUsers = userService.getAllUsers();
+        UserPdfExporter exporter = new UserPdfExporter();
+        exporter.export(listUsers, httpServletResponse);
+    }
+
+
 }

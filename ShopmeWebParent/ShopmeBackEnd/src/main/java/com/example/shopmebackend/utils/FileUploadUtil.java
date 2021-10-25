@@ -1,4 +1,4 @@
-package com.example.shopmebackend.Utils;
+package com.example.shopmebackend.utils;
 
 import org.springframework.web.multipart.MultipartFile;
 

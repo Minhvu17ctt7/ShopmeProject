@@ -1,4 +1,4 @@
-package com.example.shopmebackend.Utils;
+package com.example.shopmebackend.utils;
 
 import com.example.shopmecommon.entity.User;
 import org.supercsv.io.CsvBeanWriter;
