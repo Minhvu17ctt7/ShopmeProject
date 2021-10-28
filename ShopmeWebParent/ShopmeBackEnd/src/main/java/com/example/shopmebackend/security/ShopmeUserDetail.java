@@ -24,7 +24,9 @@ public class ShopmeUserDetail implements UserDetails {
     public Collection<? extends GrantedAuthority> getAuthorities() {
         Set<Role> roles = user.getRoles();
         List<SimpleGrantedAuthority> authorities = new ArrayList<>();
-        roles.stream().map(role -> authorities.add(new SimpleGrantedAuthority(role.getName())));
+        for(Role role: roles) {
+            authorities.add(new SimpleGrantedAuthority(role.getName()));
+        }
         return authorities;
     }
 
@@ -60,5 +62,12 @@ public class ShopmeUserDetail implements UserDetails {
 
     public String getFullname() {
         return user.getFirstName() + " " + user.getLastName();
+    }
+
+    public void setFirstName(String firstName) {
+        user.setFirstName(firstName);
+    }
+    public void setLastName(String lastName) {
+        user.setLastName(lastName);
     }
 }

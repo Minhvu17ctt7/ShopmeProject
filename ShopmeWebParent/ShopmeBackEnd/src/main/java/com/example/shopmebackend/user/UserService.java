@@ -70,6 +70,20 @@ public class UserService {
 
     }
 
+    public User updateUser(User userInform) {
+        User user = userRepository.findById(userInform.getId()).get();
+        if(!userInform.getPassword().isEmpty()) {
+            user.setPassword(userInform.getPassword());
+            encoderPassword(user);
+        }
+        if(userInform.getPhotos() != null) {
+            user.setPhotos(userInform.getPhotos());
+        }
+        user.setFirstName(userInform.getFirstName());
+        user.setLastName(userInform.getLastName());
+        return userRepository.save(user);
+    }
+
     public void deleteUser(Long id) throws UserNotFoundException {
         Long count = userRepository.countUsersById(id);
         if(count == null || count == 0) {

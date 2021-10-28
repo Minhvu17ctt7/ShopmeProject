@@ -1,5 +1,6 @@
-package com.example.shopmebackend.user;
+package com.example.shopmebackend.user.controller;
 
+import com.example.shopmebackend.user.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.repository.query.Param;
 import org.springframework.web.bind.annotation.GetMapping;
