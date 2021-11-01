@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments :: page_header(${titlePage})" />
+
+  <body>
+    <div>
+      <div th:replace="navigation :: menu"></div>
+      <div>
+        <div class="m-2">
+          <h2>Manage Category/[[${titlePage}]]</h2>
+        </div>
+        <form
+          th:action="@{/categories/save}"
+          method="post"
+          style="max-width: 600px; margin: 0 auto"
+          th:object="${category}"
+          onsubmit="return submitForm(this)"
+          enctype="multipart/form-data"
+        >
+          <input type="hidden" id="id-hidden" th:field="*{id}" >
+          <div class="border border-secondary rounded p-3">
+            <div class="form-group row">
+              <label for="name" class="col-sm-4 col-form-label">Category name</label>
+              <input
+                type="text"
+                id="name"
+                class="form-control col-sm-8 pr-1"
+                th:field="*{name}"
+                minlength="3"
+                maxlength="128"
+                required
+              />
+            </div>
+            <div class="form-group row">
+              <label for="alias" class="col-sm-4 col-form-label"
+                >Alias</label
+              >
+              <input
+                type="text"
+                id="alias"
+                class="form-control col-sm-8 pr-1"
+                th:field="*{alias}"
+                required
+              />
+            </div>
+            <div class="form-group row">
+              <label class="col-sm-4 col-form-label">Parent</label>
+              <div class="col-sm-8" style="padding: 0;">
+                <select  class="form-control" th:field="*{parent}">
+                  <option value="0">[No parent]</option>
+                  <th:block th:each="cat : ${categories}">
+                    <option th:value="${cat.id}">[[${cat.name}]]</option>
+                  </th:block>
+                </select>
+              </div>
+            </div>
+
+            <div class="form-group row">
+              <label for="file-image" class="col-sm-4 col-form-label">Image</label>
+              <div class="col-sm-8" style="padding: 0;">
+                <input type="hidden" th:field="*{image}">
+                <input type="file" name="fileImage" class="mb-2" id="file-image" accept="image/jpeg, image/png" required>
+                <div class="mt-2">
+                  <img
+                          th:src="@{${category.pathImage}}"
+                          style="width: 100px"
+                          alt="avatar"
+                  />
+                </div>
+              </div>
+            </div>
+            <div class="form-group row">
+              <label for="enabled" class="col-sm-4 col-form-label">Enabled</label>
+              <div class="col-sm-8" style="padding: 0;">
+                <input type="checkbox" id="enabled" class="mr-1" th:field="*{enabled}">
+              </div>
+            </div>
+            <div class="text-center">
+              <button type="submit" class="btn btn-primary m-3">Save</button>
+              <button type="button" class="btn btn-secondary" id="btnCancle">Cancel</button>
+            </div>
+          </div>
+        </form>
+      </div>
+      <!-- Modal -->
+<div class="modal fade" id="modal-dialog" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="modal-title"></h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <p id="model-message" class="modal-body">
+      </p>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+      <div>
+        <div th:replace="fragments :: footer"></div>
+      </div>
+    </div>
+    <script type="text/javascript">
+      urlButtonCancel = "[[@{/categories}]]";
+    </script>
+    <script th:src="@{/js/common_form.js}"></script>
+  </body>
+</html>

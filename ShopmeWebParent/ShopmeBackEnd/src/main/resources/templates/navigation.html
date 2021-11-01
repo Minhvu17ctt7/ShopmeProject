@@ -1,106 +1,116 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
+  <head>
+    <meta charset="UTF-8" />
     <title>Title</title>
-</head>
-<body>
-<nav th:fragment="menu" class="navbar navbar-expand-lg navbar-dark bg-dark">
-    <form th:action="@{/logout}" method="post" th:hidden="true" name="logoutForm">
+  </head>
+  <body>
+    <nav th:fragment="menu" class="navbar navbar-expand-lg navbar-dark bg-dark">
+      <form
+        th:action="@{/logout}"
+        method="post"
+        th:hidden="true"
+        name="logoutForm"
+      >
         <input type="submit" />
-    </form>
-    <a class="navbar-brand" th:href="@{/}">
+      </form>
+      <a class="navbar-brand" th:href="@{/}">
         <img
-                th:src="@{/docs/4.6/assets/brand/bootstrap-solid.svg}"
-                alt="main-logo"
-                width="30"
-                height="30"
+          th:src="@{/docs/4.6/assets/brand/bootstrap-solid.svg}"
+          alt="main-logo"
+          width="30"
+          height="30"
         />
-    </a>
-    <button
-            class="navbar-toggler"
-            type="button"
-            data-toggle="collapse"
-            data-target="#navbarNav"
-            aria-controls="navbarNav"
-            aria-expanded="false"
-            aria-label="Toggle navigation"
-    >
+      </a>
+      <button
+        class="navbar-toggler"
+        type="button"
+        data-toggle="collapse"
+        data-target="#navbarNav"
+        aria-controls="navbarNav"
+        aria-expanded="false"
+        aria-label="Toggle navigation"
+      >
         <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarNav">
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav">
-        <th:block sec:authorize="hasAuthority('Admin')">
+          <th:block sec:authorize="hasAuthority('Admin')">
             <li class="nav-item active">
-                <a class="nav-link" th:href="@{/users}"
+              <a class="nav-link" th:href="@{/users}"
                 >Users <span class="sr-only">(current)</span></a
-                >
+              >
             </li>
-        </th:block>
-        <t:block sec:authorize="hasAnyAuthority('Admin', 'Editor')">
+          </th:block>
+          <t:block sec:authorize="hasAnyAuthority('Admin', 'Editor')">
             <li class="nav-item">
-                <a class="nav-link" th:href="@{#}">Categories</a>
+              <a class="nav-link" th:href="@{/categories}">Categories</a>
             </li>
-        </t:block>
-        <th:block sec:authorize="hasAnyAuthority('Admin', 'Editor')">>
+          </t:block>
+          <th:block sec:authorize="hasAnyAuthority('Admin', 'Editor')">
             <li class="nav-item">
-                <a class="nav-link" th:href="@{#}">Branch</a>
+              <a class="nav-link" th:href="@{#}">Branch</a>
             </li>
-            </th:block>
-            <th:block sec:authorize="hasAnyAuthority('Admin','Salesperson', 'Editor', 'Shipper')">
+          </th:block>
+          <th:block
+            sec:authorize="hasAnyAuthority('Admin','Salesperson', 'Editor', 'Shipper')"
+          >
             <li class="nav-item">
-                <a class="nav-link" th:href="@{#}">Products</a>
+              <a class="nav-link" th:href="@{#}">Products</a>
             </li>
-            </th:block>
-            <th:block sec:authorize="hasAnyAuthority('Admin','Salesperson')">
+          </th:block>
+          <th:block sec:authorize="hasAnyAuthority('Admin','Salesperson')">
             <li class="nav-item">
-                <a class="nav-link" th:href="@{#}">Customer</a>
+              <a class="nav-link" th:href="@{#}">Customer</a>
             </li>
-            </th:block>
-            <th:block sec:authorize="hasAnyAuthority('Admin','Salesperson')">
+          </th:block>
+          <th:block sec:authorize="hasAnyAuthority('Admin','Salesperson')">
             <li class="nav-item">
-                <a class="nav-link" th:href="@{#}">Shipping</a>
+              <a class="nav-link" th:href="@{#}">Shipping</a>
             </li>
-            </th:block>
-            <th:block sec:authorize="hasAnyAuthority('Admin','Salesperson')">
+          </th:block>
+          <th:block sec:authorize="hasAnyAuthority('Admin','Salesperson')">
             <li class="nav-item">
-                <a class="nav-link" th:href="@{#}">Orders</a>
+              <a class="nav-link" th:href="@{#}">Orders</a>
             </li>
-            </th:block>
-            <th:block sec:authorize="hasAnyAuthority('Admin','Salesperson')">
+          </th:block>
+          <th:block sec:authorize="hasAnyAuthority('Admin','Salesperson')">
             <li class="nav-item">
-                <a class="nav-link" th:href="@{#}">Sale reports</a>
+              <a class="nav-link" th:href="@{#}">Sale reports</a>
             </li>
-            </th:block>
-            <th:block sec:authorize="hasAnyAuthority('Admin', 'Editor')">
+          </th:block>
+          <th:block sec:authorize="hasAnyAuthority('Admin', 'Editor')">
             <li class="nav-item">
-                <a class="nav-link" th:href="@{#}">Articles</a>
+              <a class="nav-link" th:href="@{#}">Articles</a>
             </li>
-            </th:block>
-            <th:block sec:authorize="hasAnyAuthority('Admin', 'Editor')">
+          </th:block>
+          <th:block sec:authorize="hasAnyAuthority('Admin', 'Editor')">
             <li class="nav-item">
-                <a class="nav-link" th:href="@{#}">Menus</a>
+              <a class="nav-link" th:href="@{#}">Menus</a>
             </li>
-            </th:block>
-            <th:block sec:authorize="hasAuthority('Admin')">
+          </th:block>
+          <th:block sec:authorize="hasAuthority('Admin')">
             <li class="nav-item">
-                <a class="nav-link" th:href="@{#}">Settings</a>
+              <a class="nav-link" th:href="@{#}">Settings</a>
             </li>
-            </th:block>
-            <li>
-                <span class="fas fa-user fa-2x silver-icon"></span>
-            </li>
-            <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" id="dropdownMenuButton" data-toggle="dropdown"
-                  th:href="@{/account}"
-                   sec:authentication="principal.fullname"
-                ></a>
-                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                    <a class="dropdown-item" id="btn-logout" href="">Logout</a>
-                </div>
-            </li>
+          </th:block>
+          <li>
+            <span class="fas fa-user fa-2x silver-icon"></span>
+          </li>
+          <li class="nav-item dropdown">
+            <a
+              class="nav-link dropdown-toggle"
+              id="dropdownMenuButton"
+              data-toggle="dropdown"
+              th:href="@{/account}"
+              sec:authentication="principal.fullname"
+            ></a>
+            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+              <a class="dropdown-item" id="btn-logout" href="">Logout</a>
+            </div>
+          </li>
         </ul>
-    </div>
-</nav>
-</body>
+      </div>
+    </nav>
+  </body>
 </html>

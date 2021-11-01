@@ -39,6 +39,32 @@
     ></span>
 </th>
 
+<div th:fragment="category_status">
+    <a
+            th:if="${category.enabled == true}"
+            class="fas fa-check-circle fa-2x green-icon"
+            th:href="@{'/categories/' + ${category.id} + '/enabled/false'}"
+    ></a>
+    <a
+            th:if="${category.enabled == false}"
+            class="fas fa-check-circle fa-2x dark-icon"
+            th:href="@{'/categories/' + ${category.id} + '/enabled/true'}"
+    ></a>
+</div>
+<div th:fragment="category_action">
+    <a
+            class="far fa-edit fa-1x green-icon"
+            th:href="@{'/categories/edit/' + ${category.id}}"
+    ></a
+    >&nbsp;
+    <a
+            class="fas fa-trash fa-1x dark-icon btnDelete"
+            th:categoryId="${category.id}"
+            th:href="@{'/categories/delete/' + ${category.id}}"
+            title="Delete this category"
+    ></a>
+</div>
+
     <a th:fragment="link_pagination(label, pageNumber)"
             class="page-link"
             th:href="@{'/users/page/' + ${pageNumber}  + '?sortField='+ ${sortField} +'&sortName=' + ${sortName} + '&keyword=' + ${keyword != null ? keyword : ''}}"

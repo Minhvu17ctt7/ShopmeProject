@@ -48,4 +48,10 @@ public class Category {
         this(name);
         this.parent = parent;
     }
+
+    //khong lien quan den db
+    @Transient
+    public String getPathImage() {
+        return "/category-photos/" + this.id + "/" + this.image;
+    }
 }

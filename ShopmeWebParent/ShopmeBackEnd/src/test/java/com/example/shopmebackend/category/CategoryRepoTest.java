@@ -1,6 +1,7 @@
 package com.example.shopmebackend.category;
 
 import com.example.shopmebackend.admin.CategoryRepository;
+import com.example.shopmebackend.user.UserNotFoundException;
 import com.example.shopmecommon.entity.Category;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,7 +32,7 @@ public class CategoryRepoTest {
 
     @Test
     public void createSubCategoryTest() {
-        Category parent = new Category(Long.parseLong("5"));
+        Category parent = new Category(Long.parseLong("9"));
         Category children = new Category("Memory", parent);
         Category savedCategory = categoryRepository.save(children);
 
@@ -40,9 +41,10 @@ public class CategoryRepoTest {
 
     @Test
     public void createManySubCategoryTest() {
-        Category parent = new Category(Long.parseLong("2"));
+        Category parent = new Category(Long.parseLong("4"));
         Category laptopCategory = new Category("Cameras", parent);
-        Category componentCategory = new Category("Smart phones", parent);
+        Category componentCategory = new Category("Smartphones", parent);
+
 
         List<Category> savedCategories = categoryRepository.saveAll(List.of(laptopCategory, componentCategory));
 
@@ -51,7 +53,7 @@ public class CategoryRepoTest {
 
     @Test
     public void getParentCategory() {
-        Category category = categoryRepository.getById(Long.parseLong("1"));
+        Category category = categoryRepository.getById(Long.parseLong("3"));
         category.getChildren().forEach(cate-> System.out.println(cate.getName() + " "));
     }
 
@@ -85,4 +87,5 @@ public class CategoryRepoTest {
             printChildren(level + 1 ,children);
         }
     }
+
 }
