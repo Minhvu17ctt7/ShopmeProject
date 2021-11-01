@@ -1,26 +1,38 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
-<head th:replace="fragments :: page_header('User - Shopme Admin')" />
+  <head th:replace="fragments :: page_header('Category - Shopme Admin')"></head>
 
   <body>
     <div>
       <div th:replace="navigation :: menu"></div>
       <div class="m-2">
         <h2>Manage user</h2>
-        <a th:href="@{/users/new}" class="fas fa-user-plus dark-icon fa-2x"></a>
+        <a
+          th:href="@{/categories/new}"
+          class="fas fa-user-plus dark-icon fa-2x"
+        ></a>
         &nbsp;|&nbsp;
-        <a th:href="@{/users/export/csv}" class="fas fa-file-csv dark-icon fa-2x mr-1"></a>
+        <a
+          th:href="@{/categories/export/csv}"
+          class="fas fa-file-csv dark-icon fa-2x mr-1"
+        ></a>
         &nbsp;|&nbsp;
-        <a th:href="@{/users/export/excel}" class="fas fa-file-excel dark-icon fa-2x mr-1"></a>
+        <a
+          th:href="@{/categories/export/excel}"
+          class="fas fa-file-excel dark-icon fa-2x mr-1"
+        ></a>
         &nbsp;|&nbsp;
-        <a th:href="@{/users/export/pdf}" class="fas fa-file-pdf dark-icon fa-2x mr-1"></a>
+        <a
+          th:href="@{/categories/export/pdf}"
+          class="fas fa-file-pdf dark-icon fa-2x mr-1"
+        ></a>
         <div>
           <form
-            th:action="@{/users/page/1}"
+            th:action="@{/categories/page/1}"
             method="get"
             class="form-inline m-3"
           >
-            <input type="hidden" name="sortField" th:value="${sortField}"/>
+            <input type="hidden" name="sortField" th:value="${sortField}" />
             <input type="hidden" name="sortName" th:value="${sortName}" />
             Filter:
             <input
@@ -29,18 +41,22 @@
               th:value="${keywork}"
               class="form-control mr-2 ml-2"
               required
-            >
+            />
             <button
               type="submit"
               th:value="Search"
               class="btn btn-primary mr-2"
-            > <i class="fas fa-search"></i></button>
+            >
+              <i class="fas fa-search"></i>
+            </button>
             <button
               type="button"
               th:value="Clear"
               class="btn btn-secondary"
               onclick="onClearFormSearch()"
-            /><i class="fas fa-eraser"></i></button>
+            >
+              <i class="fas fa-eraser"></i>
+            </button>
           </form>
         </div>
       </div>
@@ -55,70 +71,70 @@
         <table class="table table-bordered table-striped">
           <thead class="thead-dark">
             <tr>
-              <th th:replace="fragments :: collume_link('User id', 'id')"></th>
-
-              <th scope="col">Photos</th>
-              <th th:replace="fragments :: collume_link('Email', 'email')"></th>
-              <th th:replace="fragments :: collume_link('First Name', 'firstName')"></th>
-              <th th:replace="fragments :: collume_link('Last Name', 'lastName')"></th>
-              <th scope="col">Roles</th>
-              <th th:replace="fragments :: collume_link('Enabled', 'enabled')"></th>
-              <th scope="col"></th>
+              <th>Id</th>
+              <th>Category image</th>
+              <th>Category Name</th>
+              <th>Alias</th>
+              <th>Enabled</th>
+              <th></th>
             </tr>
           </thead>
           <tbody>
-            <tr th:each="user : ${users}">
-              <td th:text="${user.id}"></td>
-              <td class="text-center">
-                <i th:if="${user.photos == null}" class="fas fa-user fa-3x"></i>
-                <img
-                  th:if="${user.photos != null}"
-                  th:src="@{${user.photosURL}}"
-                  style="width: 100px"
-                  alt="avatar"
-                />
-              </td>
-              <td th:text="${user.email}"></td>
-              <td th:text="${user.firstName}"></td>
-              <td th:text="${user.lastName}"></td>
-              <td th:text="${user.roles}"></td>
+            <tr th:each="category : ${categories}">
+              <td th:text="${category.id}"></td>
+              <td class="text-center"></td>
+              <td th:text="${category.name}"></td>
+              <td th:text="${category.alias}"></td>
               <td class="text-center">
                 <a
-                  th:if="${user.enabled == true}"
+                  th:if="${category.enabled == true}"
                   class="fas fa-check-circle fa-2x green-icon"
-                  th:href="@{'/users/' + ${user.id} + '/enabled/false'}"
+                  th:href="@{'/categories/' + ${category.id} + '/enabled/false'}"
                 ></a>
                 <a
-                  th:if="${user.enabled == false}"
+                  th:if="${category.enabled == false}"
                   class="fas fa-check-circle fa-2x dark-icon"
-                  th:href="@{'/users/' + ${user.id} + '/enabled/true'}"
+                  th:href="@{'/categories/' + ${category.id} + '/enabled/true'}"
                 ></a>
               </td>
               <td class="text-center">
                 <a
                   class="far fa-edit fa-1x green-icon"
-                  th:href="@{'/users/edit/' + ${user.id}}"
+                  th:href="@{'/categories/edit/' + ${category.id}}"
                 ></a
                 >&nbsp;
                 <a
                   class="fas fa-trash fa-1x dark-icon btnDelete"
-                  th:userId="${user.id}"
-                  th:href="@{'/users/delete/' + ${user.id}}"
-                  title="Delete this user"
+                  th:categoryId="${category.id}"
+                  th:href="@{'/categories/delete/' + ${category.id}}"
+                  title="Delete this category"
                 ></a>
               </td>
             </tr>
           </tbody>
         </table>
+      <!-- <div class="less-details">
+        <div th:each="user : ${categories}" class="row m-1">
+          <div class="col">
+            <i th:if="${user.photos == null}" class="fas fa-user fa-3x"></i>
+            <img
+              th:if="${user.photos != null}"
+              th:src="@{${user.photosURL}}"
+              style="width: 100px"
+              alt="avatar"
+            />
+          </div>
+          <div>&nbsp;</div>
+        </div>
       </div>
       <div class="text-center mb-2" th:if="${totalItems > 0}">
         <span>
-          Show users [[${startCount}]] to [[${endCount}]] of
+          Show categories [[${startCount}]] to [[${endCount}]] of
           [[${totalItems}]]</span
         >
       </div>
       <div class="text-center" th:unless="${totalItems > 0}">
-        <span> No users found </span>
+        <span> No categories found </span>
       </div>
       <div class="text-center" th:if="${totalPages > 1}">
         <nav>
@@ -131,7 +147,9 @@
             <li
               th:class="${currentPage > 1 ? 'page-item' : 'page-item disabled'}"
             >
-              <a th:replace="fragments :: link_pagination('Previous', ${currentPage - 1})"></a>
+              <a
+                th:replace="fragments :: link_pagination('Previous', ${currentPage - 1})"
+              ></a>
             </li>
             <li
               th:class="${currentPage != i ? 'page-item' : 'page-item active'}"
@@ -142,16 +160,20 @@
             <li
               th:class="${currentPage < totalPages ? 'page-item' : 'page-item disabled'}"
             >
-              <a th:replace="fragments :: link_pagination('Next', ${currentPage + 1})"></a>
+              <a
+                th:replace="fragments :: link_pagination('Next', ${currentPage + 1})"
+              ></a>
             </li>
             <li
               th:class="${currentPage < totalPages ? 'page-item' : 'page-item disabled'}"
             >
-              <a th:replace="fragments :: link_pagination('Last', ${totalPages})"></a>
+              <a
+                th:replace="fragments :: link_pagination('Last', ${totalPages})"
+              ></a>
             </li>
           </ul>
         </nav>
-      </div>
+      </div> -->
       <div
         class="modal fade"
         id="modal-dialog"
@@ -196,7 +218,7 @@
         $("#modal-dialog").modal();
       });
       function onClearFormSearch() {
-        window.location = "[[@{/users}]]";
+        window.location = "[[@{/categories}]]";
       }
     </script>
   </body>
