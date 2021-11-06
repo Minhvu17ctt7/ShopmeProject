@@ -14,7 +14,7 @@
           method="post"
           style="max-width: 600px; margin: 0 auto"
           th:object="${category}"
-          onsubmit="return submitForm(this)"
+          onsubmit="return submitForm(event ,this )"
           enctype="multipart/form-data"
         >
           <input type="hidden" id="id-hidden" th:field="*{id}" >
@@ -48,7 +48,7 @@
               <div class="col-sm-8" style="padding: 0;">
                 <select  class="form-control" th:field="*{parent}">
                   <option value="0">[No parent]</option>
-                  <th:block th:each="cat : ${categories}">
+                  <th:block th:each="cat : ${listCategories}">
                     <option th:value="${cat.id}">[[${cat.name}]]</option>
                   </th:block>
                 </select>
@@ -59,13 +59,9 @@
               <label for="file-image" class="col-sm-4 col-form-label">Image</label>
               <div class="col-sm-8" style="padding: 0;">
                 <input type="hidden" th:field="*{image}">
-                <input type="file" name="fileImage" class="mb-2" id="file-image" accept="image/jpeg, image/png" required>
+                <input type="file" name="fileImage" class="mb-2" id="file-image" accept="image/jpeg, image/png">
                 <div class="mt-2">
-                  <img
-                          th:src="@{${category.pathImage}}"
-                          style="width: 100px"
-                          alt="avatar"
-                  />
+                  <img th:src="@{${category.pathImage}}" id="thumbnail" alt="avatar" style="width: 100px">
                 </div>
               </div>
             </div>
@@ -106,6 +102,34 @@
     </div>
     <script type="text/javascript">
       urlButtonCancel = "[[@{/categories}]]";
+
+      function submitForm(e, form) {
+        e.preventDefault();
+        const nameCate = $("#name").val();
+        const aliasCate = $("#alias").val();
+        const csrfValue = $("input[name='_csrf']").val();
+        const url = "[[@{/categories/check-unique}]]";
+        const idCate = $("#id-hidden").val() || null;
+        const param = {id: idCate,name: nameCate,alias: aliasCate, _csrf: csrfValue};
+        console.log(idCate);
+        console.log(nameCate);
+        console.log(aliasCate);
+        $.post(url, param, (res) => {
+          if(res == "Ok") {
+            form.submit();
+          } else if(res == "DuplicationName"){
+            showWarningModal(nameCate + " is already");
+
+          }else if(res == "DuplicationAlias") {
+            showWarningModal(aliasCate + " is already");
+          } else {
+            showErrorModal("Unknown response from server")
+          }
+        }).fail(() => {
+          showErrorModal("Do not connect to server");
+        })
+        return false;
+      }
     </script>
     <script th:src="@{/js/common_form.js}"></script>
   </body>

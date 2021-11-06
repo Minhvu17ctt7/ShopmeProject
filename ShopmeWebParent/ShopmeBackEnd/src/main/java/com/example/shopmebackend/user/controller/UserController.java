@@ -110,7 +110,7 @@ public class UserController {
         try {
             User user = userService.get(id);
              model.addAttribute("user",user);
-             return "userForm";
+             return "/user/userForm";
         }catch (UserNotFoundException e) {
             redirectAttributes.addFlashAttribute("message", e.getMessage());
             return "redirect:/users";

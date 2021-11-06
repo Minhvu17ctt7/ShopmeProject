@@ -1,7 +1,6 @@
 package com.example.shopmebackend.category;
 
-import com.example.shopmebackend.admin.CategoryRepository;
-import com.example.shopmebackend.user.UserNotFoundException;
+import com.example.shopmebackend.Category.CategoryRepository;
 import com.example.shopmecommon.entity.Category;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -152,52 +152,18 @@
           </ul>
         </nav>
       </div>
-      <div
-        class="modal fade"
-        id="modal-dialog"
-        tabindex="-1"
-        aria-labelledby="exampleModalLabel"
-        aria-hidden="true"
-      >
-        <div class="modal-dialog">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h5 class="modal-title" id="exampleModalLabel">Delete</h5>
-              <button
-                type="button"
-                class="close"
-                data-dismiss="modal"
-                aria-label="Close"
-              >
-                <span aria-hidden="true">&times;</span>
-              </button>
-            </div>
-            <div class="modal-body"></div>
-            <div class="modal-footer">
-              <a type="button" class="btn btn-success" href="" id="btnYes"
-                >Yes</a
-              >
-              <button type="button" class="btn btn-danger" data-dismiss="modal">
-                No
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
+      <th:block th:replace="fragments :: modal_delete"></th:block>
       <div th:replace="fragments :: footer"></div>
     </div>
     <script type="text/javascript">
+      const moduleUrl = "[[@{/users}]]";
       $(".btnDelete").click((e) => {
         e.preventDefault();
         const userId = e.target.getAttribute("userId");
         const url = e.target.getAttribute("href");
-        $("#btnYes").attr("href", url);
-        $(".modal-body").text("Delete user " + userId);
-        $("#modal-dialog").modal();
+        showDeleteComfirmModel(url, userId, "user");
       });
-      function onClearFormSearch() {
-        window.location = "[[@{/users}]]";
-      }
     </script>
+  <script type="text/javascript" th:src="@{/js/common_list.js}"></script>
   </body>
 </html>

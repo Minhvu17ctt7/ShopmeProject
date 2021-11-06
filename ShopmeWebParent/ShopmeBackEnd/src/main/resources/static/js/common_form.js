@@ -22,3 +22,16 @@ function updateImage(fileInput) {
     }
     reader.readAsDataURL(file);
 }
+
+function showErrorModal(message) {
+    return showModalDialog("Error", message);
+}
+
+function showWarningModal(message) {
+    return showModalDialog("Warning", message);
+}
+function showModalDialog(title, message) {
+    $("#modal-title").text(title);
+    $("#model-message").text(message);
+    $("#modal-dialog").modal();
+}

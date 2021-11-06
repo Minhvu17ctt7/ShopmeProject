@@ -57,17 +57,53 @@
             th:href="@{'/categories/edit/' + ${category.id}}"
     ></a
     >&nbsp;
-    <a
-            class="fas fa-trash fa-1x dark-icon btnDelete"
-            th:categoryId="${category.id}"
-            th:href="@{'/categories/delete/' + ${category.id}}"
-            title="Delete this category"
-    ></a>
+    <th:block th:if="${category.hasChildren == false}">
+        <a
+                class="fas fa-trash fa-1x dark-icon btnDelete"
+                th:categoryId="${category.id}"
+                th:href="@{'/categories/delete/' + ${category.id}}"
+                title="Delete this category"
+        ></a>
+    </th:block>
 </div>
 
     <a th:fragment="link_pagination(label, pageNumber)"
             class="page-link"
             th:href="@{'/users/page/' + ${pageNumber}  + '?sortField='+ ${sortField} +'&sortName=' + ${sortName} + '&keyword=' + ${keyword != null ? keyword : ''}}"
     >[[${label}]]</a>
+
+<div
+        th:fragment="modal_delete"
+        class="modal fade"
+        id="modal-dialog"
+        tabindex="-1"
+        aria-labelledby="exampleModalLabel"
+        aria-hidden="true"
+>
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Delete</h5>
+                <button
+                        type="button"
+                        class="close"
+                        data-dismiss="modal"
+                        aria-label="Close"
+                >
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body"></div>
+            <div class="modal-footer">
+                <a type="button" class="btn btn-success" href="" id="btnYes"
+                >Yes</a
+                >
+                <button type="button" class="btn btn-danger" data-dismiss="modal">
+                    No
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
 </body>
 </html>

@@ -27,6 +27,9 @@ public class Category {
 
     private boolean enabled;
 
+    @Transient
+    private boolean hasChildren;
+
     @ManyToOne
     @JoinColumn(name = "parent_id")
     private Category parent;
@@ -44,9 +47,18 @@ public class Category {
         this.image = "default.png";
     }
 
+    public void updateHasChildren() {
+        this.hasChildren = this.children.size() > 0 ? true : false;
+    }
+
     public  Category(String name, Category parent) {
         this(name);
         this.parent = parent;
+    }
+
+    @Override
+    public String toString() {
+        return "Name: " + this.name + ", alias: " + alias;
     }
 
     //khong lien quan den db

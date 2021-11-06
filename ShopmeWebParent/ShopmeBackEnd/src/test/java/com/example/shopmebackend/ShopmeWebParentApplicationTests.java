@@ -1,9 +1,8 @@
 package com.example.shopmebackend;
 
-import com.example.shopmebackend.admin.CategoryService;
+import com.example.shopmebackend.Category.CategoryService;
 import com.example.shopmebackend.user.UserNotFoundException;
 import com.example.shopmecommon.entity.Category;
-import nonapi.io.github.classgraph.utils.LogNode;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
