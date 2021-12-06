@@ -1,11 +1,15 @@
 package com.example.shopmebackend.category;
 
-import com.example.shopmebackend.Category.CategoryRepository;
+import com.example.shopmebackend.category.repository.CategoryRepository;
 import com.example.shopmecommon.entity.Category;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.test.annotation.Rollback;
 
 import java.util.List;
@@ -85,6 +89,17 @@ public class CategoryRepoTest {
 
             printChildren(level + 1 ,children);
         }
+    }
+
+    @Test
+    public void testGetRootCategoryPage() {
+        Sort sort = Sort.by("name").ascending();
+        Pageable page = PageRequest.of(1, 4, sort);
+
+        Page<Category> pageCate = categoryRepository.findRootCategory(page);
+
+        List<Category> categories = pageCate.getContent();
+        System.out.println(categories);
     }
 
 }

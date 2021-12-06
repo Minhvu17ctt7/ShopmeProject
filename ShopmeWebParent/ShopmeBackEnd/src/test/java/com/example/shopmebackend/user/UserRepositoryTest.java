@@ -1,5 +1,6 @@
 package com.example.shopmebackend.user;
 
+import com.example.shopmebackend.user.repository.UserRepository;
 import com.example.shopmecommon.entity.Role;
 import com.example.shopmecommon.entity.User;
 import org.junit.jupiter.api.Test;

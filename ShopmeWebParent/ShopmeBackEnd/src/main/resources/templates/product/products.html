@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+<head th:replace="fragments :: page_header('Products - shopme admin','none')"></head>
+
+<body>
+<div>
+    <div th:replace="navigation :: menu"></div>
+    <div class="m-2">
+        <h2>Manage products</h2>
+        <a
+                th:href="@{/products/new}"
+                class="fas fa-folder-plus dark-icon fa-2x mr-2"
+        ></a>
+        <a
+                th:href="@{/products/export/csv}"
+                class="fas fa-file-csv dark-icon fa-2x mr-1"
+        ></a>
+        <th:block th:replace="fragments :: search_form('/products/page/1')"></th:block>
+    </div>
+    <div
+            th:if="${message != null}"
+            class="alert alert-success m-2"
+            role="alert"
+    >
+        [[${message}]]
+    </div>
+    <div class="full-details">
+        <table class="table table-bordered table-striped">
+            <thead class="thead-dark">
+            <tr>
+                <th>Id</th>
+                <th>Main image</th>
+                <th>Product name</th>
+                <th>Brands</th>
+                <th>Categories</th>
+                <th>Enabled</th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="product : ${products}">
+                <td th:text="${product.id}"></td>
+                <td class="text-center">
+<!--                    <img-->
+<!--                            th:src="@{${product.pathImage}}"-->
+<!--                            style="width: 100px"-->
+<!--                            alt="avatar"-->
+<!--                    />-->
+                </td>
+                <td th:text="${product.name}"></td>
+                <td th:text="${product.brand.name}"></td>
+                <td th:text="${product.category.name}"></td>
+
+                <td class="text-center">
+                    <a
+                            class="far fa-file-alt fa-1x green-icon"
+                            th:href="@{'/products/detail/' + ${product.id}}"
+                    ></a
+                    >&nbsp;
+                    <a
+                            class="far fa-edit fa-1x green-icon"
+                            th:href="@{'/products/edit/' + ${product.id}}"
+                    ></a
+                    >&nbsp;
+                    <a
+                            class="fas fa-trash fa-1x dark-icon btnDelete"
+                            th:productId="${product.id}"
+                            th:href="@{'/products/delete/' + ${product.id}}"
+                            title="Delete this user"
+                    ></a>
+                </td>
+                <td></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+<!--    <th:block th:replace="fragments :: pagination('/brands', 'brand')"></th:block>-->
+    <th:block th:replace="fragments :: modal_delete"></th:block>
+    <div th:replace="fragments :: footer"></div>
+</div>
+<script type="text/javascript">
+    const moduleUrl = "[[@{/products}]]";
+    $(".btnDelete").click((e) => {
+        e.preventDefault();
+        const id = e.target.getAttribute("productId");
+        const url = e.target.getAttribute("href");
+        console.log(id);
+        console.log(url);
+        showDeleteComfirmModel(url, id, "product");
+    });
+</script>
+<script type="text/javascript" th:src="@{/js/common_list.js}"></script>
+</body>
+</html>

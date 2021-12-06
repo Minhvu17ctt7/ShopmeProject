@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head th:fragment="page_header(title)">
+<head th:fragment="page_header(title, remove)" th:remove="${remove}">
     <meta charset="UTF-8" />
     <title>[[${title}]]</title>
     <link
@@ -23,6 +23,7 @@
             type="text/javascript"
             th:src="@{/js/common.js}"
     ></script>
+
 </head>
 <body>
 
@@ -67,9 +68,9 @@
     </th:block>
 </div>
 
-    <a th:fragment="link_pagination(label, pageNumber)"
+    <a th:fragment="link_pagination(label, pageNumber, moduleURL)"
             class="page-link"
-            th:href="@{'/users/page/' + ${pageNumber}  + '?sortField='+ ${sortField} +'&sortName=' + ${sortName} + '&keyword=' + ${keyword != null ? keyword : ''}}"
+            th:href="@{${moduleURL} + '/page/' + ${pageNumber}  + '?sortField='+ ${sortField} +'&sortName=' + ${sortName} + '&keyword=' + ${keyword != null ? keyword : ''}}"
     >[[${label}]]</a>
 
 <div
@@ -104,6 +105,74 @@
             </div>
         </div>
     </div>
+</div>
+
+<div th:fragment="pagination(moduleURL, typeLink)">
+    <div class="text-center" th:unless="${totalItems > 0}">
+        <span> No [[${typeLink}]] found </span>
+    </div>
+    <div class="text-center" th:if="${totalPages > 1}">
+        <nav>
+            <ul class="pagination justify-content-center">
+                <li
+                        th:class="${currentPage > 1 ? 'page-item' : 'page-item disabled'}"
+                >
+                    <a th:replace="fragments :: link_pagination('First', 1, ${moduleURL})"></a>
+                </li>
+                <li
+                        th:class="${currentPage > 1 ? 'page-item' : 'page-item disabled'}"
+                >
+                    <a th:replace="fragments :: link_pagination('Previous', ${currentPage - 1}, ${moduleURL})"></a>
+                </li>
+                <li
+                        th:class="${currentPage != i ? 'page-item' : 'page-item active'}"
+                        th:each=" i : ${#numbers.sequence(1, totalPages)}"
+                >
+                    <a th:replace="fragments :: link_pagination(${i}, ${i}, ${moduleURL})"></a>
+                </li>
+                <li
+                        th:class="${currentPage < totalPages ? 'page-item' : 'page-item disabled'}"
+                >
+                    <a th:replace="fragments :: link_pagination('Next', ${currentPage + 1}, ${moduleURL})"></a>
+                </li>
+                <li
+                        th:class="${currentPage < totalPages ? 'page-item' : 'page-item disabled'}"
+                >
+                    <a th:replace="fragments :: link_pagination('Last', ${totalPages}, ${moduleURL})"></a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+</div>
+
+<div th:fragment="search_form(url)">
+    <form
+            th:action="@{${url}}"
+            method="get"
+            class="form-inline m-3"
+    >
+        <input type="hidden" name="sortField" th:value="${sortField}"/>
+        <input type="hidden" name="sortName" th:value="${sortName}" />
+        Filter:
+        <input
+                type="search"
+                name="keyword"
+                th:value="${keywork}"
+                class="form-control mr-2 ml-2"
+                required
+        >
+        <button
+                type="submit"
+                th:value="Search"
+                class="btn btn-primary mr-2"
+        > <i class="fas fa-search"></i></button>
+        <button
+                type="button"
+                th:value="Clear"
+                class="btn btn-secondary"
+                onclick="onClearFormSearch()"
+        /><i class="fas fa-eraser"></i></button>
+    </form>
 </div>
 </body>
 </html>

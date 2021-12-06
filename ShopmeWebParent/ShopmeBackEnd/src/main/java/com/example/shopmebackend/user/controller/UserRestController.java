@@ -1,9 +1,8 @@
 package com.example.shopmebackend.user.controller;
 
-import com.example.shopmebackend.user.UserService;
+import com.example.shopmebackend.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.repository.query.Param;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 

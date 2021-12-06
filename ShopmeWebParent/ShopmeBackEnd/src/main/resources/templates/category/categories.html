@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
-  <head th:replace="fragments :: page_header('Categories - shopme admin')"></head>
+  <head th:replace="fragments :: page_header('Categories - shopme admin','none')"></head>
 
   <body>
     <div>
@@ -15,39 +15,7 @@
           th:href="@{/categories/export/csv}"
           class="fas fa-file-csv dark-icon fa-2x mr-1"
         ></a>
-        <div>
-          <form
-            th:action="@{/categories/page/1}"
-            method="get"
-            class="form-inline m-3"
-          >
-            <input type="hidden" name="sortField" th:value="${sortField}" />
-            <input type="hidden" name="sortName" th:value="${sortName}" />
-            Filter:
-            <input
-              type="search"
-              name="keyword"
-              th:value="${keywork}"
-              class="form-control mr-2 ml-2"
-              required
-            />
-            <button
-              type="submit"
-              th:value="Search"
-              class="btn btn-primary mr-2"
-            >
-              <i class="fas fa-search"></i>
-            </button>
-            <button
-              type="button"
-              th:value="Clear"
-              class="btn btn-secondary"
-              onclick="onClearFormSearch()"
-            >
-              <i class="fas fa-eraser"></i>
-            </button>
-          </form>
-        </div>
+        <th:block th:replace="fragments :: search_form('/categories/page/1')"></th:block>
       </div>
       <div
         th:if="${message != null}"
@@ -62,9 +30,9 @@
             <tr>
               <th>Id</th>
               <th>Category image</th>
-              <th><a class="text-white" th:href="@{'/categories?sorted=' + ${sortReverse}}">Category Name</a>
+              <th><a class="text-white" th:href="@{'/categories/page/' + ${currentPage}  +'?sortField=' + ${reverseSort}}">Category Name</a>
                 <span
-                        th:class="${sortReverse == 'asc' ? 'fas fa-sort-up' : 'fas fa-sort-down'}"
+                        th:class="${reverseSort == 'asc' ? 'fas fa-sort-up' : 'fas fa-sort-down'}"
                 ></span></th>
               <th>Alias</th>
               <th>Enabled</th>
@@ -93,6 +61,7 @@
           </tbody>
         </table>
       </div>
+      <th:block th:replace="fragments :: pagination('/categories', 'category')"></th:block>
       <th:block th:replace="fragments :: modal_delete"></th:block>
       <div th:replace="fragments :: footer"></div>
     </div>

@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <head th:replace="fragments :: page_header(${titlePage}, 'tag')" />
+    <link rel="stylesheet" th:href="@{/js/richtext.min.css}" />
+    <script th:src="@{/js/jquery.richtext.min.js}"></script>
+</head>
+<body>
+<div>
+    <div th:replace="navigation :: menu"></div>
+    <div>
+        <div class="m-2">
+            <h2>Manage products/[[${titlePage}]]</h2>
+        </div>
+        <form
+                th:action="@{/products/save}"
+                method="post"
+                th:object="${product}"
+        >
+            <input type="hidden" th:field="*{id}"/>
+            <nav>
+                <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                    <a class="nav-link active" id="nav-overview-tab" data-toggle="tab" href="#overview" role="tab" aria-controls="nav-home" aria-selected="true">Overview</a>
+                    <a class="nav-link" id="nav-description-tab" data-toggle="tab" href="#description" role="tab" aria-controls="nav-profile" aria-selected="false">Description</a>
+                    <a class="nav-link" id="nav-image-tab" data-toggle="tab" href="#image" role="tab" aria-controls="nav-contact" aria-selected="false">Images</a>
+                    <a class="nav-link" id="nav-detail-tab" data-toggle="tab" href="#detail" role="tab" aria-controls="nav-contact" aria-selected="false">Details</a>
+                    <a class="nav-link" id="nav-shipping-tab" data-toggle="tab" href="#shipping" role="tab" aria-controls="nav-contact" aria-selected="false">Shipping</a>
+                </div>
+            </nav>
+            <div class="tab-content" id="nav-tabContent">
+                <div class="tab-pane fade show active p-2" id="overview" role="tabpanel" aria-labelledby="nav-overview-tab">
+                    <th:block th:replace="/product/product_overview :: content"></th:block>
+                </div>
+                <div class="tab-pane fade p-2" id="description" role="tabpanel" aria-labelledby="nav-description-tab">
+                 <th:block th:replace="/product/product_description :: content"></th:block>
+                </div>
+                <div class="tab-pane fade p-2" id="image" role="tabpanel" aria-labelledby="nav-image-tab"></div>
+                <div class="tab-pane fade p-2" id="detail" role="tabpanel" aria-labelledby="nav-detail-tab"></div>
+                <div class="tab-pane fade p-2" id="shipping" role="tabpanel" aria-labelledby="nav-shipping-tab">
+                  <th:block th:replace="/product/product_shipping :: content"></th:block></div>
+
+            </div>
+            <div class="text-center">
+                <button type="submit" class="btn btn-primary m-3">Save</button>
+                <button type="button" class="btn btn-secondary" id="btnCancle">Cancel</button>
+            </div>
+        </form>
+    </div>
+    <!-- Modal -->
+    <div class="modal fade" id="modal-dialog" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modal-title"></h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <p id="model-message" class="modal-body">
+                </p>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div>
+        <div th:replace="fragments :: footer"></div>
+    </div>
+</div>
+<script type="text/javascript">
+    urlButtonCancel = "[[@{/products}]]";
+    brandModuleUrl = "[[@{/brands}]]"
+
+    dropdownBrand = $("#brand");
+    dropdownCategory = $("#category");
+
+    $(document).ready(function () {
+
+        $("#shortDescription").richText();
+        $("#fullDescription").richText();
+
+        dropdownBrand.change(function () {
+            dropdownCategory.empty();
+            getCategories();
+        })
+        getCategories();
+    })
+
+    function getCategories() {
+        brandId = dropdownBrand.val();
+        url = brandModuleUrl + "/" + brandId + "/categories";
+
+        $.get(url, (responseCategories) => {
+            $.each(responseCategories, function (index, category) {
+                $("<option>").val(category.id).text(category.name).appendTo(dropdownCategory)
+            })
+        })
+    }
+
+
+</script>
+<script th:src="@{/js/common_form.js}"></script>
+</body>
+</html>

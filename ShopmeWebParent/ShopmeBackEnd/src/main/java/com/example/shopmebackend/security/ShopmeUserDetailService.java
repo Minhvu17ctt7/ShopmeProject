@@ -1,6 +1,6 @@
 package com.example.shopmebackend.security;
 
-import com.example.shopmebackend.user.UserRepository;
+import com.example.shopmebackend.user.repository.UserRepository;
 import com.example.shopmecommon.entity.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;

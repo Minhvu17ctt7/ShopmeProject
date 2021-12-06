@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+    <div th:fragment="content" th:remove="tag">
+        <div class="form-group row">
+            <label for="name" class="col-sm-2 col-form-label">Product name</label>
+            <div class="col-sm-10">
+            <input
+                    type="text"
+                    id="name"
+                    class="form-control"
+                    th:field="*{name}"
+                    minlength="1"
+                    maxlength="256"
+                    required
+            />
+                </div>
+        </div>
+        <div class="form-group row">
+            <label for="name" class="col-sm-2 col-form-label">Alias:</label>
+            <div class="col-sm-10">
+            <input
+                    type="text"
+                    id="alias"
+                    class="form-control"
+                    th:field="*{alias}"
+                    placeholder="Default is product name"
+                    minlength="3"
+                    maxlength="256"
+            />
+            </div>
+        </div>
+        <div class="form-group row">
+            <label class="col-sm-2 col-form-label">Brands:</label>
+            <div class="col-sm-10">
+                <select class="form-control" id="brand" th:field="*{brand}" required>
+                    <th:block th:each="brand : ${brands}">
+                        <option th:value="${brand.id}">[[${brand.name}]]</option>
+                    </th:block>
+                </select>
+            </div>
+        </div>
+        <div class="form-group row">
+            <label class="col-sm-2 col-form-label">Categories:</label>
+            <div class="col-sm-10">
+                <select id="category" class="form-control" th:field="*{category}" required>
+                </select>
+            </div>
+        </div>
+        <div class="form-group row">
+            <label for="enabled" class="col-sm-2 col-form-label">Enabled:</label>
+            <div class="col-sm-10" >
+                <input type="checkbox" id="enabled" th:field="*{enabled}">
+            </div>
+        </div>
+        <div class="form-group row">
+            <label for="enabled" class="col-sm-2 col-form-label">In stock:</label>
+            <div class="col-sm-10" >
+                <input type="checkbox" id="inStock" th:field="*{inStock}">
+            </div>
+        </div>
+        <div class="form-group row">
+            <label for="cost" class="col-sm-2 col-form-label">Cost:</label>
+            <div class="col-sm-10">
+                <input
+                        type="number"
+                        id="cost"
+                        class="form-control"
+                        th:field="*{cost}"
+                />
+            </div>
+        </div>
+        <div class="form-group row">
+            <label for="price" class="col-sm-2 col-form-label">Price:</label>
+            <div class="col-sm-10">
+                <input
+                        type="number"
+                        id="price"
+                        class="form-control"
+                        th:field="*{price}"
+                />
+            </div>
+        </div>
+        <div class="form-group row">
+            <label for="discountPercent" class="col-sm-2 col-form-label">Discount Percent:</label>
+            <div class="col-sm-10">
+                <input
+                        type="number"
+                        id="discountPercent"
+                        class="form-control"
+                        th:field="*{discountPercent}"
+                />
+            </div>
+        </div>
+    </div>
+</body>
+</html>

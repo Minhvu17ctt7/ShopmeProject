@@ -1,8 +1,8 @@
 package com.example.shopmebackend.user.controller;
 
 import com.example.shopmebackend.security.ShopmeUserDetail;
-import com.example.shopmebackend.user.UserService;
-import com.example.shopmebackend.utils.FileUploadUtil;
+import com.example.shopmebackend.user.service.UserService;
+import com.example.shopmebackend.common.FileUploadUtil;
 import com.example.shopmecommon.entity.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
