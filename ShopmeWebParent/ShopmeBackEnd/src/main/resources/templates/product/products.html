@@ -41,16 +41,27 @@
             <tr th:each="product : ${products}">
                 <td th:text="${product.id}"></td>
                 <td class="text-center">
-<!--                    <img-->
-<!--                            th:src="@{${product.pathImage}}"-->
-<!--                            style="width: 100px"-->
-<!--                            alt="avatar"-->
-<!--                    />-->
+                    <img
+                            th:src="@{${product.mainImagePath}}"
+                            style="width: 100px"
+                            class="image-fluid"
+                            alt="avatar"
+                    />
                 </td>
                 <td th:text="${product.name}"></td>
                 <td th:text="${product.brand.name}"></td>
-                <td th:text="${product.category.name}"></td>
-
+                <td th:text="${product.category.name}"></td><td class="text-center">
+                <a
+                        th:if="${product.enabled == true}"
+                        class="fas fa-check-circle fa-2x green-icon"
+                        th:href="@{'/products/' + ${product.id} + '/enabled/false'}"
+                ></a>
+                <a
+                        th:if="${product.enabled == false}"
+                        class="fas fa-check-circle fa-2x dark-icon"
+                        th:href="@{'/products/' + ${product.id} + '/enabled/true'}"
+                ></a>
+            </td>
                 <td class="text-center">
                     <a
                             class="far fa-file-alt fa-1x green-icon"
@@ -69,7 +80,6 @@
                             title="Delete this user"
                     ></a>
                 </td>
-                <td></td>
             </tr>
             </tbody>
         </table>
@@ -80,12 +90,11 @@
 </div>
 <script type="text/javascript">
     const moduleUrl = "[[@{/products}]]";
+
     $(".btnDelete").click((e) => {
         e.preventDefault();
         const id = e.target.getAttribute("productId");
         const url = e.target.getAttribute("href");
-        console.log(id);
-        console.log(url);
         showDeleteComfirmModel(url, id, "product");
     });
 </script>

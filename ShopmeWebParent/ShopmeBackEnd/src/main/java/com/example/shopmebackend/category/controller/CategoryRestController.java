@@ -13,7 +13,8 @@ public class CategoryRestController {
     private final CategoryService categoryService;
 
     @PostMapping("/categories/check-unique")
-    public String checkUniqueNameAndAlias(@RequestParam(value = "id", required = false) Long id, @RequestParam("name") String name, @RequestParam("alias") String alias) {
+    public String checkUniqueNameAndAlias(@RequestParam(value = "id", required = false) Long id,
+                                          @RequestParam("name") String name, @RequestParam("alias") String alias) {
         return categoryService.checkNameAndAliasUnique(id, name, alias);
     }
 }

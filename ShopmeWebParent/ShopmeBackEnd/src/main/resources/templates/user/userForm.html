@@ -113,6 +113,7 @@
     <script type="text/javascript">
 
       urlButtonCancel = "[[@{/users}]]";
+      const MAX_FILE_SIZE = 1048576;
       function submitForm(form) {
         const userEmail = $("#email").val();
         const csrfValue = $("input[name='_csrf']").val();

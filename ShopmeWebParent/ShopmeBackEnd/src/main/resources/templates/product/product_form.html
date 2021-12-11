@@ -16,6 +16,8 @@
                 th:action="@{/products/save}"
                 method="post"
                 th:object="${product}"
+                onsubmit="return submitForm(event, this)"
+                enctype="multipart/form-data"
         >
             <input type="hidden" th:field="*{id}"/>
             <nav>
@@ -34,7 +36,9 @@
                 <div class="tab-pane fade p-2" id="description" role="tabpanel" aria-labelledby="nav-description-tab">
                  <th:block th:replace="/product/product_description :: content"></th:block>
                 </div>
-                <div class="tab-pane fade p-2" id="image" role="tabpanel" aria-labelledby="nav-image-tab"></div>
+                <div class="tab-pane fade p-2" id="image" role="tabpanel" aria-labelledby="nav-image-tab">
+                    <th:block th:replace="/product/product_image :: content"></th:block>
+                </div>
                 <div class="tab-pane fade p-2" id="detail" role="tabpanel" aria-labelledby="nav-detail-tab"></div>
                 <div class="tab-pane fade p-2" id="shipping" role="tabpanel" aria-labelledby="nav-shipping-tab">
                   <th:block th:replace="/product/product_shipping :: content"></th:block></div>
@@ -71,6 +75,7 @@
 <script type="text/javascript">
     urlButtonCancel = "[[@{/products}]]";
     brandModuleUrl = "[[@{/brands}]]"
+    MAX_FILE_SIZE = 5048576;
 
     dropdownBrand = $("#brand");
     dropdownCategory = $("#category");
@@ -96,6 +101,27 @@
                 $("<option>").val(category.id).text(category.name).appendTo(dropdownCategory)
             })
         })
+    }
+    function submitForm(e, form) {
+        e.preventDefault();
+        const name = $("#name").val();
+        const csrfValue = $("input[name='_csrf']").val();
+        const url = "[[@{/products/check-unique}]]";
+        const id = $("#id-hidden").val() || null;
+        const param = {id: id,name: name, _csrf: csrfValue};
+        $.post(url, param, (res) => {
+            console.log(res);
+            if(res == "OK") {
+                form.submit();
+            } else if(res == "DUPLICATE"){
+                showWarningModal(name + " is already");
+            } else {
+                showErrorModal("Unknown response from server")
+            }
+        }).fail(() => {
+            showErrorModal("Do not connect to server");
+        })
+        return false;
     }
 
 

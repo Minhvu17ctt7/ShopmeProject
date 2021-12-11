@@ -1,8 +1,6 @@
 package com.example.shopmecommon.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.domain.Auditable;
@@ -11,10 +9,13 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 @AllArgsConstructor
 @NoArgsConstructor
-@Data
+@Getter
+@Setter
 @Entity
 @EntityListeners(AuditingEntityListener.class)
 @Table(name="product")
@@ -53,10 +54,25 @@ public class Product {
     private float height;
     private float weight;
 
+    @Column(name = "main_image", nullable = false)
+    private String mainImage;
+
     @ManyToOne
     @JoinColumn(name ="category_id")
     private Category category;
     @ManyToOne
     @JoinColumn(name ="brand_id")
     private Brand brand;
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
+    private Set<ProductImage> productImages = new HashSet<>();
+
+    public void addExtraImage(String image) {
+        productImages.add(new ProductImage(image, this));
+    }
+
+    @Transient
+    public String getMainImagePath() {
+        if(id == null || this.mainImage == null) return "/images/imagethumnail.png";
+        return "/product-photos/" + this.id + "/" + this.mainImage;
+    }
 }

@@ -69,4 +69,22 @@ public class ProductRepositoryTest {
 
         productRepository.save(product);
     }
+
+    @Test
+    void testEnabled() {
+        productRepository.updateEnabledStatus(1L, false);
+    }
+
+    @Test
+    void testAddImage() {
+        Product product = productRepository.findById(3L).get();
+
+        product.setMainImage("main-image.jpg");
+
+        product.addExtraImage("image-1.jpg");
+        product.addExtraImage("image-2.jpg");
+        product.addExtraImage("image-3.jpg");
+
+        assertThat(product.getProductImages().size()).isEqualTo(3);
+    }
 }
