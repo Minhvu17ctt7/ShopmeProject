@@ -20,11 +20,23 @@ public class ProductImage {
 
     @ManyToOne
     @JoinColumn(name = "product_id")
+    @ToString.Exclude
     @JsonIgnore
     private Product product;
 
     public ProductImage(String image, Product product) {
         this.image = image;
         this.product = product;
+    }
+
+    public ProductImage(Long id, String image, Product product) {
+        this.id = id;
+        this.image = image;
+        this.product = product;
+    }
+
+    @Transient
+    public String getProductImage() {
+        return "/product-photos/" + product.getId() + "/extraImages/" + image;
     }
 }

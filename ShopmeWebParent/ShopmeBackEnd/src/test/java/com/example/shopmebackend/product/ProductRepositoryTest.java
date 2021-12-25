@@ -87,4 +87,15 @@ public class ProductRepositoryTest {
 
         assertThat(product.getProductImages().size()).isEqualTo(3);
     }
+
+    @Test
+    void testAddProductDetail() {
+        Product product = productRepository.findById(3L).get();
+
+        product.addDetail("dung luowng", "128gb");
+        product.addDetail("camera", "12mb");
+        product.addDetail("pin", "5000");
+
+        assertThat(product.getProductDetails().size()).isEqualTo(3);
+    }
 }

@@ -112,10 +112,8 @@
         const url = "[[@{/categories/check-unique}]]";
         const idCate = $("#id-hidden").val() || null;
         const param = {id: idCate,name: nameCate,alias: aliasCate, _csrf: csrfValue};
-        console.log(idCate);
-        console.log(nameCate);
-        console.log(aliasCate);
         $.post(url, param, (res) => {
+          console.log("da vao")
           if(res == "Ok") {
             form.submit();
           } else if(res == "DuplicationName"){

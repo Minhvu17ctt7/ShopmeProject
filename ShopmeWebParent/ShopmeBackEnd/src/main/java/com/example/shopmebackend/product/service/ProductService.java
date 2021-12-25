@@ -40,7 +40,7 @@ public class ProductService {
     }
 
     public String checkNameUnique(Long id, String name) {
-        Boolean isProductNew = id == null || id ==0;
+        Boolean isProductNew = (id == null || id ==0);
         Product product = productRepository.findByName(name);
         if(isProductNew) {
             if(product != null) return "DUPLICATE";
@@ -63,5 +63,10 @@ public class ProductService {
             throw new ProductNotFoundException("Could not found product with id " + id);
         }
         productRepository.deleteById(id);
+    }
+
+    public Product getProductById(Long id) throws ProductNotFoundException {
+        return productRepository.findById(id).orElseThrow(() ->
+                 new ProductNotFoundException("Not found product with id: "+ id));
     }
 }

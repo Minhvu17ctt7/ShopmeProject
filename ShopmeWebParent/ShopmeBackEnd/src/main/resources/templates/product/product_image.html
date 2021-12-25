@@ -7,7 +7,7 @@
 <body>
 
 <div th:fragment="content" th:remove="tag">
-    <div class="row">
+    <div class="row" id="add-Image">
         <div class="col border m-2 p-2">
             <div>
                 <label>Main image</label>
@@ -18,7 +18,43 @@
                 >
             </div>
             <div>
-                <input type="file" name="fileImage" id="file-image" accept="image/jpeg image/png" required>
+                <input type="file" name="fileImage" id="file-image" accept="image/jpeg image/png"
+                th:required="${product.mainImage == null}"
+                >
+            </div>
+            <input type="hidden" th:field="*{mainImage}" />
+        </div>
+        <th:block th:each="productImage, status : ${product.productImages}">
+            <div class="col border m-2 p-2" th:id="'divExtraImage' + ${status.index}">
+                <div id="extraImageHeader0">
+                    <label>Extra image [[${status.index + 1}]]: [[${productImage.image}]]</label>
+                </div>
+                <a name="linkRemoveExtraImage" class="btn fas fa-times-circle fa-2x icon-dark float-right"></a>
+                <div>
+                    <img th:src=@{${productImage.productImage}} alt="Main image" class="img-fluid"
+                         th:id="'extratImage' + ${status.index}"
+                    >
+
+                </div>
+                <div>
+                    <input type="file" name="extraImage" accept="image/jpeg image/png">
+                </div>
+                <input type="hidden" name="imageIDs" th:id="'imageId' + ${status.index}"/>
+                <input type="hidden" name="imageNames" th:id="'imageName' + ${status.index}"/>
+            </div>
+        </th:block>
+
+        <div class="col border m-2 p-2" th:id="'divExtraImage' + ${sizeExtraImage}">
+            <div id="extraImageHeader0">
+                <label>Extra image [[${sizeExtraImage + 1}]]</label>
+            </div>
+            <div>
+                <img th:src=@{/images/imagethumnail.png} alt="Main image" class="img-fluid"
+                     th:id="'extratImage'+ ${sizeExtraImage}"
+                >
+            </div>
+            <div>
+                <input type="file" name="extraImage" accept="image/jpeg image/png">
             </div>
         </div>
     </div>

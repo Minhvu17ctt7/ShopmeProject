@@ -10,6 +10,7 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Set;
 
 @AllArgsConstructor
@@ -65,14 +66,30 @@ public class Product {
     private Brand brand;
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
     private Set<ProductImage> productImages = new HashSet<>();
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
+    private Set<ProductDetail> productDetails = new HashSet<>();
 
     public void addExtraImage(String image) {
         productImages.add(new ProductImage(image, this));
+    }
+
+    public void addDetail(String name, String value) {
+        productDetails.add(new ProductDetail(name, value, this));
     }
 
     @Transient
     public String getMainImagePath() {
         if(id == null || this.mainImage == null) return "/images/imagethumnail.png";
         return "/product-photos/" + this.id + "/" + this.mainImage;
+    }
+
+    public boolean checkFileExist(String fileName) {
+       Iterator<ProductImage> iteratorImages = this.productImages.iterator();
+
+       while (iteratorImages.hasNext()) {
+           ProductImage productImage = iteratorImages.next();
+           if(productImage.getImage().equals(fileName)) return true;
+       }
+       return false;
     }
 }

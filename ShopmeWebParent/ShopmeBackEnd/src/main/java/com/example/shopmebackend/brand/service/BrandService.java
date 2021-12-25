@@ -8,6 +8,7 @@ import com.example.shopmebackend.category.model.CategoryPage;
 import com.example.shopmecommon.entity.Brand;
 import com.example.shopmecommon.entity.Category;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -19,6 +20,7 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class BrandService {
 
     private final BrandRepository brandRepository;

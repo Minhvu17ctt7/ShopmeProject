@@ -6,6 +6,7 @@ import com.example.shopmebackend.category.repository.CategoryRepository;
 import com.example.shopmebackend.user.exception.UserNotFoundException;
 import com.example.shopmecommon.entity.Category;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
