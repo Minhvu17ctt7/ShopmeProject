@@ -59,7 +59,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                     .formLogin()
                     .loginPage("/login")
-                    .defaultSuccessUrl("/shopme-admin/")
+                    .defaultSuccessUrl("/", true)
                 .and()
                     .logout()
                 .and()
